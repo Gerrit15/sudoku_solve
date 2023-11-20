@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[13pt]{article}
 \usepackage{geometry}
  \geometry{
  a4paper,
@@ -6,10 +6,77 @@
  left=20mm,
  top=20mm,
  }
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usetikzlibrary{matrix}
 \author{Gerrit Roessler}
 \title{Sudoku Solver Technical Specifications}
 \date{2023}
 
 \begin{document}
-  \maketitle
+\maketitle
+\section{Introduction}
+This project exists to take an input file containing an 
+(unsolved) sudoku board, and solve it. This will be a command 
+line application developed mainly in the Rust language.
+\section{Goals}
+\begin{enumerate}
+  \item Command line input
+  \item Takes input file, generates an output file
+  \item Making use of the wave function collapse algorithm.
+\end{enumerate}
+\subsection{Stretch Goals}
+\begin{enumerate}
+  \item Graphical User Interface, or GUI
+  \item In the case of branching solutions, generating multiple outputs
+  \item Threading
+\end{enumerate}
+\section{Wave Function Collapse}
+Wave function collapse is an algorithm that has a scary name, but 
+is surprisingly simple, if resource intensive. The idea is that if 
+an item has an unknown state (like a sudoku tile that isn't filled in), 
+conceptually it can be considered in all of the states it could possibly be in.
+For exmpale, given a very simple psudo-sudoku board, only going up to 4 (as opposed to 9):\\
+\begin{center}
+\begin{tikzpicture}
+\draw[step=0.5cm,color=gray,xscale=2,yscale=2] (-1,-1) grid (1,1);
+\matrix[matrix of nodes,nodes={inner sep=0pt,text width=1cm,align=center,minimum height=1cm}]{
+4 & A & 2 & B \\
+\_ & \_ & \_ & \_ \\
+\_ & 1 & \_ & \_ \\
+\_ & \_ & \_ & \_\\};
+\end{tikzpicture}
+\end{center}
+Consider A and B to be tiles that aren't filled it. If only the top row is considered, the wave
+function collapse algorithm would say that both $A$ and $B$ be in both a state of being 1 
+and a state of being 3, at the same time! But if the program then considers tiles outside the top row,
+it sees that in the second column, which $A$ belongs to, there is a 1. Since $A$ now cannot be $\{1, 3\}$, 
+instead the set of all its current possible states is $\{3\}$. Because of this, it's real state is known, and it 
+"collapses" into a single state, namely being 3. Since $A$ is now 3, the set of all of $B$'s states is now simply
+$\{1\}$, meaning it too can collapse into a single state. \\
+\section{Why Rust/How Rust?}
+The Rust language is ideal for this project for many reasons. Primarily, the type system it offers, combined with the
+pattern matching it provides, allows for excellent error handling for avoiding issues at runtime. Secondly, similar to the C family,
+Rust is a relatively fast language, which is imperative for this project, due to the nature of the algorithm in use. \\
+Because of the Rust compiler and the Rust Foundation's clear stance on what idiomatic Rust looks like, using the common naming conventions shouldn't be an issue.
+For example, variables in snake\_case, UpperCamelCase for data structures, SCREAMING\_SNAKE\_CASE for statics, etc. If something isn't idiomatically named, the 
+Rust compiler will throw a warning. As with most Rust projects, defining what pardigm is in use is difficult, as Rust provides optionality for everything 
+from (something like) OOP to (something like) functional programming. This project will use mainly a OOP design pattern, basing around data 
+strucutres, however useful functional features such as closures are encouraged.
+\section{Large picture process}
+\begin{center}
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{tikzpicture}[node distance=1.75cm]
+  \node (start) [startstop] {Command line perameters};
+  \node (pro1) [process, below of=start] {Seek input file};
+  \node (dec1) [decision, below of=pro1, yshift=-0.6cm] {Is is usable?};
+  \node (stop) [startstop, right of=dec1, xshift=3cm] {Stop, provide error message};
+  \node (pro2) [process, below of=dec1, yshift=-0.6cm] {Format input into data structure};
+\end{tikzpicture}
+\end{center}
 \end{document}
