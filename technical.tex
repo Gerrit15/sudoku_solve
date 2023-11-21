@@ -1,4 +1,4 @@
-\documentclass[13pt]{article}
+\documentclass[11pt]{article}
 \usepackage{geometry}
  \geometry{
  a4paper,
@@ -29,7 +29,7 @@ line application developed mainly in the Rust language.
 \begin{enumerate}
   \item Graphical User Interface, or GUI
   \item In the case of branching solutions, generating multiple outputs
-  \item Threading
+  \item GPU Acceleration
 \end{enumerate}
 \section{Wave Function Collapse}
 Wave function collapse is an algorithm that has a scary name, but 
@@ -47,8 +47,8 @@ For exmpale, given a very simple psudo-sudoku board, only going up to 4 (as oppo
 \_ & \_ & \_ & \_\\};
 \end{tikzpicture}
 \end{center}
-Consider A and B to be tiles that aren't filled it. If only the top row is considered, the wave
-function collapse algorithm would say that both $A$ and $B$ be in both a state of being 1 
+Consider A and B to be tiles that aren't filled in. If only the top row is considered, the wave
+function collapse algorithm would say that both $A$ and $B$ are in both a state of being 1 
 and a state of being 3, at the same time! But if the program then considers tiles outside the top row,
 it sees that in the second column, which $A$ belongs to, there is a 1. Since $A$ now cannot be $\{1, 3\}$, 
 instead the set of all its current possible states is $\{3\}$. Because of this, it's real state is known, and it 
@@ -77,6 +77,19 @@ strucutres, however useful functional features such as closures are encouraged.
   \node (dec1) [decision, below of=pro1, yshift=-0.6cm] {Is is usable?};
   \node (stop) [startstop, right of=dec1, xshift=3cm] {Stop, provide error message};
   \node (pro2) [process, below of=dec1, yshift=-0.6cm] {Format input into data structure};
+  \node (wfc) [io, below of=pro2] {Wave Function Collapse};
+  \node (dec2) [decision, below of=wfc, yshift=-1.5cm] {Is the puzzle solvable?};
+  \node (error) [startstop, right of=dec2, xshift=3.6cm] {Stop, provide error message};
+  \node (out) [startstop, below of=dec2, yshift=-1.5cm] {Output solved sudoku};
+
+  \draw [arrow] (start) -- (pro1);
+  \draw [arrow] (pro1) -- (dec1);
+  \draw [arrow] (dec1) -- node[anchor=south] {no} (stop);
+  \draw [arrow] (dec1) -- node[anchor=east] {yes} (pro2);
+  \draw [arrow] (pro2) -- (wfc);
+  \draw [arrow] (wfc) -- (dec2);
+  \draw [arrow] (dec2) -- node[anchor=south] {no} (error);
+  \draw [arrow] (dec2) -- node[anchor=east] {yes} (out);
 \end{tikzpicture}
 \end{center}
 \end{document}
