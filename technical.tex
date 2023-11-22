@@ -108,6 +108,8 @@ Rust compiler will throw a warning. As with most Rust projects, defining what pa
 from (something like) OOP to (something like) functional programming. This project will use mainly a OOP design pattern, basing around data 
 strucutres, however useful functional features such as closures are encouraged.
 Discussing the use of specific crates, command line input should be managed by the Clap crate, I/O should be 
-managed by the Serde crate and whatever format crate is relevant (likely the CSV crate.) What is likely easiest to do, in concrete terms, is to load in a CSV to a struct
-containing a 2D Vector of an enum that has two states: u8 and a Vector of u8, and iterate over that using wave function collapse. Note that Serde will require a custom deserialization.
+managed by the Serde crate and whatever format crate is relevant (likely the CSV crate.) If GPU acceleration is achievable within a given timeframe, 
+it seems that the crate WGPU is the most advanced one in rust for GLSL compilation. What is likely easiest to do, in 
+concrete terms, is to load in a CSV to a struct containing a 2D Vector of an enum that has two states: u8 and a Vector of u8, and iterate 
+over that using wave function collapse. Note that Serde will require a custom deserialization.
 \end{document}
