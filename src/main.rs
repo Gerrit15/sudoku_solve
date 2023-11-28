@@ -32,3 +32,8 @@ enum Tile {
     Num(u8),
     Non(Vec<u8>)
 }
+
+//a simple 2d data structure to hold the sudoku board
+struct Board {
+    items: Vec<Vec<Tile>>
+}
