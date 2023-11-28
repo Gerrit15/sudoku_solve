@@ -25,3 +25,10 @@ fn load_board(path: String) -> Vec<Vec<String>> {
     }
     return board
 }
+
+//Num for when a tile has a single state, to allow for faster iteration
+//Non for when a tile's entropy is not zero
+enum Tile {
+    Num(u8),
+    Non(Vec<u8>)
+}
