@@ -1,5 +1,19 @@
 fn main() {
-    let path = "/home/gerrit/projects/sudoku_solve/example.csv".to_owned();
+    let path = "example.csv".to_owned();
+    let board = load_board(path);
+
+    for i in board {
+        for j in i {
+            print!("{}, ", j);
+        }
+        println!();
+    }
+}
+
+//this function takes a file system path, and returns a 2d vec of strings if it's a properly formatted
+//CSV, using the aptly named CSV crate. This is extremely volitile, and cannot handle improperly
+//formatted files
+fn load_board(path: String) -> Vec<Vec<String>> {
     let file = std::fs::File::open(path).unwrap();
 
     //let "has headers" be a command line option
@@ -9,5 +23,5 @@ fn main() {
         let record: Vec<String> = i.unwrap();
         board.push(record);
     }
-    println!("{:?}", board);
+    return board
 }
