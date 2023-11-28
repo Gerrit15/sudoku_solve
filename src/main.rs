@@ -4,5 +4,10 @@ fn main() {
 
     //let "has headers" be a command line option
     let mut csv_reader = csv::ReaderBuilder::new().has_headers(false).from_reader(file);
-    println!("{:?}", csv_reader.records().next().unwrap().unwrap());
+    let mut board = vec![];
+    for i in csv_reader.deserialize() {
+        let record: Vec<String> = i.unwrap();
+        board.push(record);
+    }
+    println!("{:?}", board);
 }
