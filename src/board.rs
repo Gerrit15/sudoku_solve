@@ -1,6 +1,6 @@
 //Num for when a tile has a single state, to allow for faster iteration
 //Non for when a tile's entropy is not zero
-//consider in future using box and making it recursive
+//consider in future using Vec of Tiles
 enum Tile {
     Num(u8),
     Non(Vec<u8>)
@@ -12,6 +12,7 @@ pub struct Board {
 }
 
 impl Board {
+    //generates a new Board given a 2d Vec of Strings
     pub fn new(items: Vec<Vec<String>>) -> Board {
         let mut board = vec![];
         for i in items {
@@ -20,7 +21,7 @@ impl Board {
                 match j.parse::<u8>() {
                     Ok(x) => row.push(Tile::Num(x)),
                     //1, 2, 3 is placeholder
-                    Err(_) => row.push(Tile::Non(vec![1, 2, 3]))
+                    Err(_) => row.push(Tile::Non(vec![]))
                 }
             }
             board.push(row);

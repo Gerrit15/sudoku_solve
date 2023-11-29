@@ -14,9 +14,9 @@ fn main() {
     }
 }
 
-//this function takes a file system path, and returns a 2d vec of strings if it's a properly formatted
-//CSV, using the aptly named CSV crate. This is extremely volitile, and cannot handle improperly
-//formatted files
+//this function takes a file system path, and (hopefully) returns a 2d vec of strings if it's a properly formatted
+//CSV, using the aptly named CSV crate. If something goes wrong, it will return a string with an
+//error message.
 fn load_board(args: Args) -> Result<Board, String> {
 
     let path = match args.path.to_str() {
@@ -48,6 +48,7 @@ fn load_board(args: Args) -> Result<Board, String> {
     Ok(Board::new(board))
 }
 
+//atn: refactoring Args is not worth it. Parser does not like fields being public
 ///TODO: command line description
 #[derive(Parser)]
 struct Args {
@@ -58,12 +59,13 @@ struct Args {
     #[arg(short, long)]
     contains_header: bool,
 
+    ///Provides verbose error output
     #[arg(short, long)]
     verbose: bool,
 }
 
-//atn: refactoring Args is not worth it. Parser does not like fields being public
 //Other potential options:
-//  - Creative: tries more to load numbers
+//  - Creative: tries more to load numbers (ex: cutting leading whitespace)
 //  - Strict: does not? Might be redundant
 //  - Output: where to put the output of the file
+//  - Displaying Each step/Walking through steps? For solving
