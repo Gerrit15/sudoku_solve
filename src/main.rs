@@ -49,10 +49,6 @@ struct Args {
     ///Does the CSV have a header
     #[arg(short, long)]
     contains_header: bool,
-
-    ///Provides verbose error messages
-    #[arg(short, long)]
-    verbose: bool
 }
 
 //atn: refactoring Args is not worth it. Parser does not like fields being public
@@ -60,3 +56,4 @@ struct Args {
 //  - Creative: tries more to load numbers
 //  - Strict: does not? Might be redundant
 //  - Output: where to put the output of the file
+//  - Verbose: Output verbose error messages
