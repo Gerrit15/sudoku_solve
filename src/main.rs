@@ -1,4 +1,5 @@
 mod board;
+use std::path::PathBuf;
 use board::Board;
 
 fn main() {
@@ -23,3 +24,22 @@ pub fn load_board(path: String) -> Board {
     Board::new(board)
 }
 
+///TODO: command line description
+#[derive(clap::Parser)]
+struct Args {
+    ///Path of the desired Sudoku board
+    path: PathBuf,
+
+    ///Does the CSV have a header
+    #[arg(short, long)]
+    contains_header: bool,
+
+    ///Provides verbose error messages
+    #[arg(short, long)]
+    verbose: bool
+}
+
+//Other potential options:
+//  - Creative: tries more to load numbers
+//  - Strict: does not? Might be redundant
+//  - Output: where to put the output of the file
