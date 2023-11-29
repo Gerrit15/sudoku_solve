@@ -37,19 +37,22 @@ impl Board {
     fn new(items: Vec<Vec<String>>) -> Board {
         let mut board = vec![];
         for i in items {
+            let mut row = vec![];
             for j in i {
-                let mut row = vec![];
                 match j.parse::<u8>() {
                     Ok(x) => row.push(Tile::Num(x)),
                     //1, 2, 3 is placeholder
                     Err(_) => row.push(Tile::Non(vec![1, 2, 3]))
                 }
             }
+            board.push(row);
         }
         Board {
             items: board
         }
     }
+
+    //iterates through a reference to the board's tiles, printing them out
     fn display(&self) {
         for i in &self.items {
             for j in i {
@@ -58,7 +61,7 @@ impl Board {
                     Tile::Non(x) => print!("{:?}, ", x)
                 }
             }
+            println!("");
         }
-        println!();
     }
 }
