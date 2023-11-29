@@ -5,8 +5,13 @@ use clap::Parser;
 
 fn main() {
     let args = Args::parse();
-    let board = load_board(args).unwrap();
-    board.display();
+    let board = load_board(args);
+    match board {
+        Ok(b) => b.display(),
+        Err(e) => {
+            println!("Oops! Something went wrong!\n{}", e);
+        }
+    }
 }
 
 //this function takes a file system path, and returns a 2d vec of strings if it's a properly formatted
