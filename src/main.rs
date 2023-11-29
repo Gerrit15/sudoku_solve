@@ -26,7 +26,11 @@ fn load_board(args: Args) -> Result<Board, String> {
 
     let file = match std::fs::File::open(path) {
         Ok(x) => x,
-        Err(x) => return Err(x.to_string())
+        Err(e) => {
+            let mut error_msg = e.to_string();
+            if args.verbose {error_msg = error_msg + "\n" + &e.kind().to_string()}
+            return Err(error_msg)
+        }
     };
 
     let mut csv_reader = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
@@ -34,7 +38,10 @@ fn load_board(args: Args) -> Result<Board, String> {
     for i in csv_reader.deserialize() {
         let record: Vec<String> = match i {
             Ok(x) => x,
-            Err(e) => return Err(e.to_string())
+            Err(e) => { 
+                //thanks to the lovely CSV crate, there is no more information to display
+               return Err(e.to_string())
+            }
         };
         board.push(record);
     }
@@ -50,6 +57,9 @@ struct Args {
     ///Does the CSV have a header
     #[arg(short, long)]
     contains_header: bool,
+
+    #[arg(short, long)]
+    verbose: bool,
 }
 
 //atn: refactoring Args is not worth it. Parser does not like fields being public
@@ -57,4 +67,3 @@ struct Args {
 //  - Creative: tries more to load numbers
 //  - Strict: does not? Might be redundant
 //  - Output: where to put the output of the file
-//  - Verbose: Output verbose error messages
