@@ -39,13 +39,12 @@ fn load_board(args: Args) -> Result<Board, String> {
         let record: Vec<String> = match i {
             Ok(x) => x,
             Err(e) => { 
-                //thanks to the lovely CSV crate, there is no more information to display
                return Err(e.to_string())
             }
         };
         board.push(record);
     }
-    Ok(Board::new(board))
+    Board::new(board)
 }
 
 //atn: refactoring Args is not worth it. Parser does not like fields being public

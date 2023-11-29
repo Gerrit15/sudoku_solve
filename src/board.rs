@@ -13,22 +13,28 @@ pub struct Board {
 
 impl Board {
     //generates a new Board given a 2d Vec of Strings
-    pub fn new(items: Vec<Vec<String>>) -> Board {
+    pub fn new(items: Vec<Vec<String>>) -> Result<Board, String> {
         let mut board = vec![];
         for i in items {
             let mut row = vec![];
             for j in i {
                 match j.parse::<u8>() {
-                    Ok(x) => row.push(Tile::Num(x)),
-                    //1, 2, 3 is placeholder
+                    Ok(x) => {
+                        if x > 9 {return Err("Board contains number greater then 9".to_string())}
+                        row.push(Tile::Num(x))
+                    },
                     Err(_) => row.push(Tile::Non(vec![]))
                 }
             }
             board.push(row);
         }
-        Board {
+        if board.len() != 9 {return Err("Board is not 9 rows".to_string())}
+        //It is given by the CSV crate that every row is the same length
+        if board[0].len() != 9 {return Err("Board is not 9 columns".to_string())}
+
+        Ok(Board {
             items: board
-        }
+        })
     }
 
     //iterates through a reference to the board's tiles, printing them out
