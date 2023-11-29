@@ -24,17 +24,18 @@ fn load_board(args: Args) -> Result<Board, String> {
         None => return Err("Failed to parse path".to_owned())
     };
 
-    //let file = std::fs::File::open(path).unwrap();
     let file = match std::fs::File::open(path) {
         Ok(x) => x,
         Err(x) => return Err(x.to_string())
     };
 
-    //let "has headers" be a command line option
     let mut csv_reader = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
     let mut board = vec![];
     for i in csv_reader.deserialize() {
-        let record: Vec<String> = i.unwrap();
+        let record: Vec<String> = match i {
+            Ok(x) => x,
+            Err(e) => return Err(e.to_string())
+        };
         board.push(record);
     }
     Ok(Board::new(board))
