@@ -53,6 +53,32 @@ fn base_non() {
     assert_eq!(board, b2);
 }
 
+//To confirm files with headers can be loaded
+#[test]
+fn header() {
+    use Tile::*;
+    let args = Args {
+        path: PathBuf::from("test_csvs/header.csv"),
+        contains_header: false,
+        verbose: true
+    };
+    let board = load_board(args).unwrap();
+    let b2 = Board {
+        items: vec![
+            vec![Num(1),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1)],
+            vec![Num(2),Num(2),Num(2),Num(2),Num(2),Num(2),Num(2),Num(2),Num(2)],
+            vec![Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3)],
+            vec![Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4)],
+            vec![Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5)],
+            vec![Num(6),Num(6),Num(6),Num(6),Num(6),Num(6),Num(6),Num(6),Num(6)],
+            vec![Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7)],
+            vec![Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8)],
+            vec![Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9)]
+        ]
+    };
+    assert_eq!(board, b2);
+}
+
 //To confirm that a board that's too tall (too many rows) isn't loaded in
 #[test]
 fn too_tall() {
