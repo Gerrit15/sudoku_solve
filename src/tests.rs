@@ -59,7 +59,7 @@ fn header() {
     use Tile::*;
     let args = Args {
         path: PathBuf::from("test_csvs/header.csv"),
-        contains_header: false,
+        contains_header: true,
         verbose: true
     };
     let board = load_board(args).unwrap();
