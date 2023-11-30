@@ -63,6 +63,10 @@ struct Args {
     ///Provides verbose error output
     #[arg(short, long)]
     verbose: bool,
+
+    ///Attempts a little harder to load the board
+    #[arg(short, long)]
+    attempt: bool
 }
 
 //Other potential options:
