@@ -1,14 +1,16 @@
 //Num for when a tile has a single state, to allow for faster iteration
 //Non for when a tile's entropy is not zero
 //consider in future using Vec of Tiles
-enum Tile {
+#[derive(PartialEq, Debug)]
+pub enum Tile {
     Num(u8),
     Non(Vec<u8>)
 }
 
 //a simple 2d data structure to hold the sudoku board
+#[derive(PartialEq, Debug)]
 pub struct Board {
-    items: Vec<Vec<Tile>>
+    pub items: Vec<Vec<Tile>>
 }
 
 impl Board {
