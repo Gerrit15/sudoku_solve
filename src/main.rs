@@ -2,6 +2,7 @@ mod board;
 use std::path::PathBuf;
 use board::Board;
 use clap::Parser;
+
 #[cfg(test)]
 mod tests;
 
@@ -64,7 +65,7 @@ struct Args {
     #[arg(short, long)]
     verbose: bool,
 
-    ///Attempts a little harder to load the board
+    ///Attempts a little harder to interpret numbers in csv
     #[arg(short, long)]
     attempt: bool
 }
