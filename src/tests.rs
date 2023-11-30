@@ -1,6 +1,7 @@
 use super::{Args, Board, board::Tile, load_board};
 use std::path::PathBuf;
 
+//To make sure a basic board is loaded in properly
 #[test]
 fn base_load() {
     use Tile::*;
@@ -25,6 +26,8 @@ fn base_load() {
     };
     assert_eq!(board, b2);
 }
+
+//To confirm that a board with (proper) holes can be loaded properly
 #[test]
 fn base_non() {
     use Tile::*;
@@ -50,6 +53,7 @@ fn base_non() {
     assert_eq!(board, b2);
 }
 
+//To confirm that a board that's too tall (too many rows) isn't loaded in
 #[test]
 fn too_tall() {
      let args = Args {
@@ -61,6 +65,7 @@ fn too_tall() {
     assert_eq!(board, Err("Board is not 9 rows".to_string()))
 }
 
+//To confirm that a board that's too short (not enough rows) isn't loaded in
 #[test]
 fn too_short() {
      let args = Args {
@@ -72,6 +77,7 @@ fn too_short() {
     assert_eq!(board, Err("Board is not 9 rows".to_string()))
 }
 
+//To confirm that a board that's too wide (too many columns) isn't loaded
 #[test]
 fn too_wide() {
      let args = Args {
@@ -83,6 +89,7 @@ fn too_wide() {
     assert_eq!(board, Err("Board is not 9 columns".to_string()))
 }
 
+//To confirm that a board that's too narrow (not enough columns) isn't loaded
 #[test]
 fn too_narrow() {
      let args = Args {
@@ -94,6 +101,7 @@ fn too_narrow() {
     assert_eq!(board, Err("Board is not 9 columns".to_string()))
 }
 
+//To confirm that a board that contains numbers greater then 9 isn't loaded
 #[test]
 fn out_of_bounds() {
      let args = Args {
@@ -105,6 +113,7 @@ fn out_of_bounds() {
     assert_eq!(board, Err("Board contains number greater then 9".to_string()))
 }
 
+//To confirm that a board with non uniform width isn't loaded
 #[test]
 fn non_uniform() {
      let args = Args {
