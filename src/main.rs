@@ -2,6 +2,8 @@ mod board;
 use std::path::PathBuf;
 use board::Board;
 use clap::Parser;
+#[cfg(test)]
+mod tests;
 
 fn main() {
     let args = Args::parse();
