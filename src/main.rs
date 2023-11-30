@@ -50,7 +50,6 @@ fn load_board(args: Args) -> Result<Board, String> {
     Board::new(board)
 }
 
-//atn: refactoring Args is not worth it. Parser does not like fields being public
 ///TODO: command line description
 #[derive(Parser)]
 struct Args {
@@ -71,7 +70,7 @@ struct Args {
 }
 
 //Other potential options:
-//  - Creative: tries more to load numbers (ex: cutting leading whitespace)
-//  - Strict: does not? Might be redundant
 //  - Output: where to put the output of the file
 //  - Displaying Each step/Walking through steps? For solving
+//      - In the form of a video or gif? could be a fun stretch goal
+//  - What do do in the event of a branching pathway?
