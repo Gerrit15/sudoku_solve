@@ -8,7 +8,8 @@ fn base_load() {
     let args = Args {
         path: PathBuf::from("test_csvs/base.csv"),
         contains_header: false,
-        verbose: false
+        verbose: false,
+        attempt: false
     };
     let board = load_board(args).unwrap();
     let b2 = Board {
@@ -34,7 +35,8 @@ fn base_non() {
     let args = Args {
         path: PathBuf::from("test_csvs/non.csv"),
         contains_header: false,
-        verbose: false
+        verbose: false,
+        attempt: false
     };
     let board = load_board(args).unwrap();
     let b2 = Board {
@@ -60,7 +62,8 @@ fn header() {
     let args = Args {
         path: PathBuf::from("test_csvs/header.csv"),
         contains_header: true,
-        verbose: true
+        verbose: false,
+        attempt: false
     };
     let board = load_board(args).unwrap();
     let b2 = Board {
@@ -85,7 +88,9 @@ fn too_tall() {
      let args = Args {
         path: PathBuf::from("test_csvs/long.csv"),
         contains_header: false,
-        verbose: false
+        verbose: false,
+        attempt: false
+
     };
     let board = load_board(args);
     assert_eq!(board, Err("Board is not 9 rows".to_string()))
@@ -97,7 +102,8 @@ fn too_short() {
      let args = Args {
         path: PathBuf::from("test_csvs/short.csv"),
         contains_header: false,
-        verbose: false
+        verbose: false,
+        attempt: false
     };
     let board = load_board(args);
     assert_eq!(board, Err("Board is not 9 rows".to_string()))
@@ -109,7 +115,8 @@ fn too_wide() {
      let args = Args {
         path: PathBuf::from("test_csvs/wide.csv"),
         contains_header: false,
-        verbose: false
+        verbose: false,
+        attempt: false
     };
     let board = load_board(args);
     assert_eq!(board, Err("Board is not 9 columns".to_string()))
@@ -121,7 +128,8 @@ fn too_narrow() {
      let args = Args {
         path: PathBuf::from("test_csvs/narrow.csv"),
         contains_header: false,
-        verbose: false
+        verbose: false,
+        attempt: false
     };
     let board = load_board(args);
     assert_eq!(board, Err("Board is not 9 columns".to_string()))
@@ -133,7 +141,8 @@ fn out_of_bounds() {
      let args = Args {
         path: PathBuf::from("test_csvs/out_of_bound.csv"),
         contains_header: false,
-        verbose: false
+        verbose: false,
+        attempt: false
     };
     let board = load_board(args);
     assert_eq!(board, Err("Board contains number greater then 9".to_string()))
@@ -145,7 +154,8 @@ fn non_uniform() {
      let args = Args {
         path: PathBuf::from("test_csvs/non_uniform.csv"),
         contains_header: false,
-        verbose: false
+        verbose: false,
+        attempt: false
     };
     let board = load_board(args);
     assert_eq!(board, Err("CSV error: record 1 (line: 2, byte: 18): found record with 7 fields, but the previous record has 9 fields".to_string()))
