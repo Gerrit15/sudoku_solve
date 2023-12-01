@@ -34,6 +34,7 @@ impl Board {
                                     found = true;
                                 }
                             }
+                            if !found {row.push(Tile::Non(vec![]))}
                         } else {
                             row.push(Tile::Non(vec![]))
                         }
