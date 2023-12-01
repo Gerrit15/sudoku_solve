@@ -47,7 +47,7 @@ fn load_board(args: Args) -> Result<Board, String> {
         };
         board.push(record);
     }
-    Board::new(board)
+    Board::new(board, args.attempt)
 }
 
 ///TODO: command line description

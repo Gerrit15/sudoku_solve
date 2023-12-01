@@ -15,7 +15,7 @@ pub struct Board {
 
 impl Board {
     //generates a new Board given a 2d Vec of Strings
-    pub fn new(items: Vec<Vec<String>>) -> Result<Board, String> {
+    pub fn new(items: Vec<Vec<String>>, attempt: bool) -> Result<Board, String> {
         let mut board = vec![];
         for i in items {
             let mut row = vec![];
@@ -25,7 +25,19 @@ impl Board {
                         if x > 9 || x == 0 {return Err("Board contains invalid number".to_string())}
                         row.push(Tile::Num(x))
                     },
-                    Err(_) => row.push(Tile::Non(vec![]))
+                    Err(_) => {
+                        if attempt {
+                            let mut found = false;
+                            for k in 1..10 {
+                                if j.contains(&k.to_string()) && !found {
+                                    row.push(Tile::Num(k));
+                                    found = true;
+                                }
+                            }
+                        } else {
+                            row.push(Tile::Non(vec![]))
+                        }
+                    }
                 }
             }
             board.push(row);
