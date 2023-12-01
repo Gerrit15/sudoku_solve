@@ -1,7 +1,7 @@
 # Sudoku Solver: Wave Function Collapse
 The problem is seemingly simple: given a sudoku board, how can that board be solved? There are 
-many ways to solve the problem, but the one planned here is the wave function collapse algorithm. Ideally, this program
-is a command line executable written in Rust that can take an input file and output a new file of the solved board.
+many ways to solve the problem, but the one untilized here is the wave function collapse algorithm. Ideally, this program
+is a command line executable written in Rust that can take an input board (in the format of a csv) and output a new file of the solved board.
 
 ## Wave function collapse
 The wave function collapse algorithm is an algorithm that has an intimidating name, but is quite tame from a programming perspective.
@@ -12,6 +12,11 @@ would say that instead of x and y simply be unknown, or having no value, x and y
 origional list is now [5, 3, 9, 2, x, 1, 4, 7, 6], so x only has one possible state: 8, meaning that the entire row collapses into a solution: 
 [5, 3, 9, 2, 8, 1, 4, 7, 6], and is solved.
 
+## How to use
+Using the cargo build too, clone the repository, the run `cargo build --release`, which will output the compiled executable into `target/release/sudoku_solve`.
+To run it, simply put `[path to executable] [path to board] [additional arguements]`. For example: `./sudoku_solve board.csv -v -a`. To view all arguements, 
+run `[path to executable] -h`.
+
 ## Goals
 - Command line input
 - Take input files, output files
@@ -19,3 +24,4 @@ origional list is now [5, 3, 9, 2, x, 1, 4, 7, 6], so x only has one possible st
 
 ## Stretch Goals
 - GUI
+- Output a nice visualization
