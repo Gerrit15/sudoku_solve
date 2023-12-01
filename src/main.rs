@@ -1,6 +1,7 @@
 mod board;
-use std::path::PathBuf;
 use board::Board;
+mod args;
+use args::Args;
 use clap::Parser;
 
 #[cfg(test)]
@@ -60,28 +61,3 @@ fn load_board(args: Args) -> Result<Board, String> {
     }
     Board::new(board, args.attempt)
 }
-
-///TODO: command line description
-#[derive(Parser, Clone)]
-struct Args {
-    ///Path of the desired Sudoku board
-    path: PathBuf,
-
-    ///Does the CSV have a header
-    #[arg(short, long)]
-    contains_header: bool,
-
-    ///Provides verbose error output
-    #[arg(short, long)]
-    verbose: bool,
-
-    ///Attempts a little harder to interpret numbers in csv
-    #[arg(short, long)]
-    attempt: bool
-}
-
-//Other potential options:
-//  - Output: where to put the output of the file
-//  - Displaying Each step/Walking through steps? For solving
-//      - In the form of a video or gif? could be a fun stretch goal
-//  - What do do in the event of a branching pathway?
