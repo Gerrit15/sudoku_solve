@@ -7,14 +7,21 @@ use clap::Parser;
 mod tests;
 
 fn main() {
+    let _ = run();
+}
+
+fn run() -> Result<(), String> {
     let args = Args::parse();
-    let board = load_board(args);
-    match board {
-        Ok(b) => b.display(),
+    let board = match load_board(args.clone()){
+        Ok(b) => b,
         Err(e) => {
-            println!("Oops! Something went wrong!\n{}", e);
+            println!("Oops! Couldn't load CSV!");
+            return Err(e)
         }
-    }
+    };
+    if args.verbose {board.display()}
+
+    Ok(())
 }
 
 //this function takes a file system path, and (hopefully) returns a 2d vec of strings if it's a properly formatted
@@ -51,7 +58,7 @@ fn load_board(args: Args) -> Result<Board, String> {
 }
 
 ///TODO: command line description
-#[derive(Parser)]
+#[derive(Parser, Clone)]
 struct Args {
     ///Path of the desired Sudoku board
     path: PathBuf,
