@@ -22,7 +22,7 @@ impl Board {
             for j in i {
                 match j.parse::<u8>() {
                     Ok(x) => {
-                        if x > 9 {return Err("Board contains number greater then 9".to_string())}
+                        if x > 9 || x == 0 {return Err("Board contains invalid number".to_string())}
                         row.push(Tile::Num(x))
                     },
                     Err(_) => row.push(Tile::Non(vec![]))

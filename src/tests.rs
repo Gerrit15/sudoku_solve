@@ -77,7 +77,7 @@ fn too_narrow() {
 fn out_of_bounds() {
     let args = arg_gen("test_csvs/out_of_bound.csv", false);
     let board = load_board(args);
-    assert_eq!(board, Err("Board contains number greater then 9".to_string()))
+    assert_eq!(board, Err("Board contains invalid number".to_string()))
 }
 
 //To confirm that a board with non uniform width isn't loaded
