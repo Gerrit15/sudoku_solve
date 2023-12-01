@@ -7,7 +7,11 @@ use clap::Parser;
 mod tests;
 
 fn main() {
-    let _ = run();
+    let result = run();
+    match result {
+        Ok(()) => (),
+        Err(e) => println!("{}", e)
+    }
 }
 
 fn run() -> Result<(), String> {
