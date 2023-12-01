@@ -88,6 +88,29 @@ fn non_uniform() {
     assert_eq!(board, Err("CSV error: record 1 (line: 2, byte: 18): found record with 7 fields, but the previous record has 9 fields".to_string()))
 }
 
+#[test]
+fn attempt() {
+    use Tile::*;
+    let args = arg_gen("test_csvs/attempt.csv", false, true);
+    let board = load_board(args);
+    let b2 = Board {
+        //This is to make sure that the Non is placed in the right spot
+        items: vec![
+            vec![Num(1),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1)],
+            vec![Num(2),Num(2),Num(2),Num(2),Num(2),Num(2),Num(2),Num(2),Num(2)],
+            vec![Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3)],
+            vec![Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4)],
+            vec![Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5)],
+            vec![Num(6),Num(6),Num(6),Num(6),Num(6),Num(6),Num(6),Num(6),Num(6)],
+            vec![Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7)],
+            vec![Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8)],
+            vec![Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Non(vec![])],
+        ]
+    };
+    assert_eq!(board.unwrap(), b2);
+
+}
+
 //A simple function to generate example cmd line arguements
 fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
     Args {
