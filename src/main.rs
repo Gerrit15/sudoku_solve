@@ -15,6 +15,9 @@ fn main() {
     }
 }
 
+//The reason for a run function is that using return statements can cause the function to return
+//prematurely, meaning that code doesn't get increasing nested. Otherwise, this functions nearly
+//identical to main
 fn run() -> Result<(), String> {
     let args = Args::parse();
     let board = match Board::load_board(args.clone()){

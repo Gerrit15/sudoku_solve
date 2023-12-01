@@ -18,12 +18,10 @@ impl Board {
     //this function takes a file system path, and (hopefully) returns a 2d vec of strings if it's a properly formatted
     //CSV, using the aptly named CSV crate. If something goes wrong, it will return a string with an error message.
     pub fn load_board(args: Args) -> Result<Board, String> {
-
         let path = match args.path.to_str() {
             Some(x) => x.to_owned(),
             None => return Err("Failed to parse path".to_owned())
         };
-
         let file = match std::fs::File::open(path) {
             Ok(x) => x,
             Err(e) => {
@@ -32,7 +30,6 @@ impl Board {
                 return Err(error_msg)
             }
         };
-
         let mut csv_reader = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
         let mut board = vec![];
         for i in csv_reader.deserialize() {
@@ -60,6 +57,9 @@ impl Board {
                     Err(_) => {
                         if attempt {
                             let mut found = false;
+                            //If it needs to attempt a little harder, will try to find the first
+                            //number between 1 and 9 in each item, for example "thisis923lalala"
+                            //will become 9
                             for k in 1..10 {
                                 if j.contains(&k.to_string()) && !found {
                                     row.push(Tile::Num(k));
