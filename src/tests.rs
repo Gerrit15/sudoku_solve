@@ -14,7 +14,7 @@ fn base_load() {
 fn base_non() {
     use Tile::*;
     let args = arg_gen("test_csvs/non.csv", false, false);
-    let board = load_board(args).unwrap();
+    let board = load_board(args);
     let b2 = Board {
         //This is to make sure that the Non is placed in the right spot
         items: vec![
@@ -29,7 +29,7 @@ fn base_non() {
             vec![Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9)],
         ]
     };
-    assert_eq!(board, b2);
+    assert_eq!(board.unwrap(), b2);
 }
 
 //To confirm files with headers can be loaded
@@ -89,11 +89,11 @@ fn non_uniform() {
 }
 
 //A simple function to generate example cmd line arguements
-fn arg_gen(path: &str, header:bool, attempt: bool) -> Args {
+fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
     Args {
         path: PathBuf::from(path),
-        contains_header: header,
+        contains_header,
         verbose: false,
-        attempt: attempt
+        attempt
     }
 }
