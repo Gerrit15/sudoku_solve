@@ -1,7 +1,7 @@
 # Sudoku Solver: Wave Function Collapse
 The problem is seemingly simple: given a sudoku board, how can that board be solved? There are 
-many ways to solve the problem, but the one untilized here is the wave function collapse algorithm. Ideally, this program
-is a command line executable written in Rust that can take an input board (in the format of a csv) and output a new file of the solved board.
+many ways to solve the problem, but the one untilized here is the wave function collapse algorithm. This program
+is a command line executable written in Rust that can take an input board (in the format of a CSV) and output a new file containing the solved board.
 
 ## Wave function collapse
 The wave function collapse algorithm is an algorithm that has an intimidating name, but is quite tame from a programming perspective.
