@@ -10,7 +10,8 @@ use error::Error;
 mod tests;
 
 fn main() {
-    let result = run();
+    let args = Args::parse();
+    let result = run(args);
     match result {
         Ok(()) => (),
         Err(e) => println!("{}", e.message)
@@ -20,8 +21,7 @@ fn main() {
 //The reason for a run function is that using return statements can cause the function to return
 //prematurely, meaning that code doesn't get increasing nested. Otherwise, this functions nearly
 //identical to main
-fn run() -> Result<(), Error> {
-    let args = Args::parse();
+fn run(args: Args) -> Result<(), Error> {
     let board = match load_board(args.clone()){
         Ok(b) => b,
         Err(e) => {
