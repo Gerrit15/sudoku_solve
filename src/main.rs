@@ -11,6 +11,7 @@ mod tests;
 
 fn main() {
     let args = Args::parse();
+    let verbose = args.verbose;
     let result = run(args);
     match result {
         Ok(()) => (),
@@ -28,7 +29,8 @@ fn run(args: Args) -> Result<(), Error> {
             let line = line!()-3;
             let file = file!().to_string();
             let message = match args.verbose {
-                true => "Oops! Couldn't load CSV!\n".to_string() + &e,
+                //make sure to account for verbose
+                true => "Oops! Couldn't load CSV!\n".to_string() + &e.message,
                 false => "Oops! Couldn't load CSV!".to_string()
             };
             //println!("Oops! Couldn't load CSV!");
@@ -42,17 +44,24 @@ fn run(args: Args) -> Result<(), Error> {
 
 //this function takes a file system path, and (hopefully) returns a 2d vec of strings if it's a properly formatted
 //CSV, using the aptly named CSV crate. If something goes wrong, it will return a string with an error message.
-pub fn load_board(args: Args) -> Result<Board, String> {
+pub fn load_board(args: Args) -> Result<Board, Error> {
     let path = match args.path.to_str() {
         Some(x) => x.to_owned(),
-        None => return Err("Failed to parse path".to_owned())
+        None => {
+            let line = line!()-3;
+            let file = file!().to_string();
+            let message = "Failed to parse path".to_string();
+            return Err(Error::new(message, line, file))
+        }
     };
     let file = match std::fs::File::open(path) {
         Ok(x) => x,
         Err(e) => {
-            let mut error_msg = e.to_string();
-            if args.verbose {error_msg = error_msg + "\n" + &e.kind().to_string()}
-            return Err(error_msg)
+            let line = line!()-3;
+            let file = file!().to_string();
+            let mut message = e.to_string();
+            if args.verbose {message = message + "\n" + &e.kind().to_string()}
+            return Err(Error::new(message, line, file))
         }
     };
     let mut csv_reader = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
@@ -61,7 +70,9 @@ pub fn load_board(args: Args) -> Result<Board, String> {
         let record: Vec<String> = match i {
             Ok(x) => x,
             Err(e) => { 
-               return Err(e.to_string())
+                let line = line!()-4;
+                let file = file!().to_string();
+                return Err(Error::new(e.to_string(), line, file));
             }
         };
         board.push(record);
