@@ -89,10 +89,9 @@ fn non_uniform() {
     let args = arg_gen("test_csvs/non_uniform.csv", false, false);
     let board = load_board(args);
     //assert_eq!(board, Err("CSV error: record 1 (line: 2, byte: 18): found record with 7 fields, but the previous record has 9 fields".to_string()))
-    assert_eq!(board, Err(Error::new("Board contains invalid number".to_string(), 26, "src/board.rs".to_string())))
-    //Err(Error { message: "CSV error: record 1 (line: 2, byte: 18): found record with 7 fields, but the previous record has 9 fields", line: 72, file: "src/main.rs" })
+    assert_eq!(board, Err(Error::new("CSV error: record 1 (line: 2, byte: 18): found record with 7 fields, but the previous record has 9 fields".to_string(), 72, "src/main.rs".to_string())))
 }
-/*
+
 #[test]
 fn attempt() {
     use Tile::*;
@@ -115,7 +114,7 @@ fn attempt() {
     assert_eq!(board.unwrap(), b2);
 
 }
-*/
+
 //A simple function to generate example cmd line arguements
 fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
     Args {
