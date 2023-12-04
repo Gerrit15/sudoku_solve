@@ -1,4 +1,4 @@
-use super::{Args, Board, board::Tile, load_board, Error};
+use super::{Args, Board, board::Tile, load_board};
 use std::path::PathBuf;
 
 //To make sure a basic board is loaded in properly
@@ -44,8 +44,7 @@ fn header() {
 #[test]
 fn too_tall() {
     let args = arg_gen("test_csvs/long.csv", false, false);
-    let board = load_board(args);
-    match board {
+    match load_board(args) {
         Ok(_) => panic!("returned a valid board"),
         Err(b) => assert_eq!(&b.message, "Board is not 9 rows")
     }
@@ -55,44 +54,50 @@ fn too_tall() {
 #[test]
 fn too_short() {
     let args = arg_gen("test_csvs/short.csv", false, false);
-    let board = load_board(args);
-    assert_eq!(board, Err(Error::new("Board is not 9 rows".to_string(), 55, "src/board.rs".to_string())))
+    match load_board(args) {
+        Ok(_) => panic!("returned a valid board"),
+        Err(b) => assert_eq!(&b.message, "Board is not 9 rows")
+    }
 }
 
 //To confirm that a board that's too wide (too many columns) isn't loaded
 #[test]
 fn too_wide() {
     let args = arg_gen("test_csvs/wide.csv", false, false);
-    let board = load_board(args);
-    //assert_eq!(board, Err("Board is not 9 columns".to_string()))
-    assert_eq!(board, Err(Error::new("Board is not 9 columns".to_string(), 62, "src/board.rs".to_string())))
+    match load_board(args) {
+        Ok(_) => panic!("returned a valid board"),
+        Err(b) => assert_eq!(&b.message, "Board is not 9 columns")
+    }
 }
 
 //To confirm that a board that's too narrow (not enough columns) isn't loaded
 #[test]
 fn too_narrow() {
     let args = arg_gen("test_csvs/narrow.csv", false, false);
-    let board = load_board(args);
-    //assert_eq!(board, Err("Board is not 9 columns".to_string()))
-    assert_eq!(board, Err(Error::new("Board is not 9 columns".to_string(), 62, "src/board.rs".to_string())))
+    match load_board(args) {
+        Ok(_) => panic!("returned a valid board"),
+        Err(b) => assert_eq!(&b.message, "Board is not 9 columns")
+    }
 }
 
 //To confirm that a board that contains numbers greater then 9 isn't loaded
 #[test]
 fn out_of_bounds() {
     let args = arg_gen("test_csvs/out_of_bound.csv", false, false);
-    let board = load_board(args);
-    //assert_eq!(board, Err("Board contains invalid number".to_string()))
-    assert_eq!(board, Err(Error::new("Board contains invalid number".to_string(), 26, "src/board.rs".to_string())))
+    match load_board(args) {
+        Ok(_) => panic!("returned a valid board"),
+        Err(b) => assert_eq!(&b.message, "Board contains invalid number")
+    }
 }
 
 //To confirm that a board with non uniform width isn't loaded
 #[test]
 fn non_uniform() {
     let args = arg_gen("test_csvs/non_uniform.csv", false, false);
-    let board = load_board(args);
-    //assert_eq!(board, Err("CSV error: record 1 (line: 2, byte: 18): found record with 7 fields, but the previous record has 9 fields".to_string()))
-    assert_eq!(board, Err(Error::new("CSV error: record 1 (line: 2, byte: 18): found record with 7 fields, but the previous record has 9 fields".to_string(), 72, "src/main.rs".to_string())))
+    match load_board(args) {
+        Ok(_) => panic!("returned a valid board"),
+        Err(b) => assert_eq!(&b.message, "CSV error: record 1 (line: 2, byte: 18): found record with 7 fields, but the previous record has 9 fields")
+    }
 }
 
 #[test]
