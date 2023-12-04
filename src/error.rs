@@ -1,3 +1,4 @@
+#[derive(PartialEq, Debug)]
 pub struct Error {
     pub message: String,
     pub line: u32,

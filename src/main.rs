@@ -15,7 +15,10 @@ fn main() {
     let result = run(args);
     match result {
         Ok(()) => (),
-        Err(e) => println!("{}", e.message)
+        Err(e) => {
+            if verbose {println!("{}\nLine {}, in {}", e.message, e.line, e.file)}
+            else {println!("{}", e.message)}
+        }
     }
 }
 
