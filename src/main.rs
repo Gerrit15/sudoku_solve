@@ -1,8 +1,10 @@
 mod board;
 mod args;
+mod error;
 use board::Board;
 use args::Args;
 use clap::Parser;
+use error::Error;
 
 #[cfg(test)]
 mod tests;
