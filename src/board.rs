@@ -6,7 +6,6 @@ pub enum Tile {
     Num(u8),
     Non(Vec<u8>)
 }
-use super::Args;
 
 //a simple 2d data structure to hold the sudoku board
 #[derive(PartialEq, Debug)]
@@ -15,34 +14,6 @@ pub struct Board {
 }
 
 impl Board {
-    //this function takes a file system path, and (hopefully) returns a 2d vec of strings if it's a properly formatted
-    //CSV, using the aptly named CSV crate. If something goes wrong, it will return a string with an error message.
-    pub fn load_board(args: Args) -> Result<Board, String> {
-        let path = match args.path.to_str() {
-            Some(x) => x.to_owned(),
-            None => return Err("Failed to parse path".to_owned())
-        };
-        let file = match std::fs::File::open(path) {
-            Ok(x) => x,
-            Err(e) => {
-                let mut error_msg = e.to_string();
-                if args.verbose {error_msg = error_msg + "\n" + &e.kind().to_string()}
-                return Err(error_msg)
-            }
-        };
-        let mut csv_reader = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
-        let mut board = vec![];
-        for i in csv_reader.deserialize() {
-            let record: Vec<String> = match i {
-                Ok(x) => x,
-                Err(e) => { 
-                   return Err(e.to_string())
-                }
-            };
-            board.push(record);
-        }
-        Board::new(board, args.attempt)
-    }
     //generates a new Board given a 2d Vec of Strings
     pub fn new(items: Vec<Vec<String>>, attempt: bool) -> Result<Board, String> {
         let mut board = vec![];

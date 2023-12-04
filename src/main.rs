@@ -22,7 +22,7 @@ fn main() {
 //identical to main
 fn run() -> Result<(), Error> {
     let args = Args::parse();
-    let board = match Board::load_board(args.clone()){
+    let board = match load_board(args.clone()){
         Ok(b) => b,
         Err(e) => {
             let line = line!()-3;
@@ -38,4 +38,33 @@ fn run() -> Result<(), Error> {
     if args.verbose {board.display()}
 
     Ok(())
+}
+
+//this function takes a file system path, and (hopefully) returns a 2d vec of strings if it's a properly formatted
+//CSV, using the aptly named CSV crate. If something goes wrong, it will return a string with an error message.
+pub fn load_board(args: Args) -> Result<Board, String> {
+    let path = match args.path.to_str() {
+        Some(x) => x.to_owned(),
+        None => return Err("Failed to parse path".to_owned())
+    };
+    let file = match std::fs::File::open(path) {
+        Ok(x) => x,
+        Err(e) => {
+            let mut error_msg = e.to_string();
+            if args.verbose {error_msg = error_msg + "\n" + &e.kind().to_string()}
+            return Err(error_msg)
+        }
+    };
+    let mut csv_reader = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
+    let mut board = vec![];
+    for i in csv_reader.deserialize() {
+        let record: Vec<String> = match i {
+            Ok(x) => x,
+            Err(e) => { 
+               return Err(e.to_string())
+            }
+        };
+        board.push(record);
+    }
+    Board::new(board, args.attempt)
 }
