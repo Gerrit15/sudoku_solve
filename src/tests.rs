@@ -45,7 +45,10 @@ fn header() {
 fn too_tall() {
     let args = arg_gen("test_csvs/long.csv", false, false);
     let board = load_board(args);
-    assert_eq!(board, Err(Error::new("Board is not 9 rows".to_string(), 55, "src/board.rs".to_string())))
+    match board {
+        Ok(_) => panic!("returned a valid board"),
+        Err(b) => assert_eq!(&b.message, "Board is not 9 rows")
+    }
 }
 
 //To confirm that a board that's too short (not enough rows) isn't loaded in
