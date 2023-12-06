@@ -45,9 +45,8 @@ fn run(args: Args) -> Result<(), Error> {
     Ok(())
 }
 
-//this function takes a file system path, and (hopefully) returns a 2d vec of strings if it's a properly formatted
-//CSV, using the aptly named CSV crate. If something goes wrong, it will return a string with an error message.
 pub fn load_board(args: Args) -> Result<Board, Error> {
+    //This is give None if it couldn't turn the path into a string
     let path = match args.path.to_str() {
         Some(x) => x.to_owned(),
         None => {
@@ -57,6 +56,8 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
             return Err(Error::new(message, line, file))
         }
     };
+
+    //This will Err<t> if the path provided doesn't have a destination
     let file = match std::fs::File::open(path) {
         Ok(x) => x,
         Err(e) => {
@@ -67,8 +68,11 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
             return Err(Error::new(message, line, file))
         }
     };
+
     let mut csv_reader = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
     let mut board = vec![];
+    
+    //This will Err<t> if the provided file doesn't go well.
     for i in csv_reader.deserialize() {
         let record: Vec<String> = match i {
             Ok(x) => x,

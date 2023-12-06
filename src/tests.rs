@@ -123,7 +123,7 @@ fn attempt() {
 
 }
 
-//A simple function to generate example cmd line arguements
+//A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
 fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
     Args {
         path: PathBuf::from(path),

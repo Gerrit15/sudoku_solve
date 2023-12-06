@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use clap::Parser;
 
-//This struct holds the arguements that a user might pass to the executable
+//Note that the triple slash is for the clap crate, it's what will show up with -h
 
 ///TODO: command line description
 #[derive(Parser, Clone)]

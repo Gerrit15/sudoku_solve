@@ -1,6 +1,5 @@
-//Num for when a tile has a single state, to allow for faster iteration
-//Non for when a tile's entropy is not zero
-//consider in future using Vec of Tiles
+use super::Error;
+
 #[derive(PartialEq, Debug)]
 pub enum Tile {
     Num(u8),
@@ -13,7 +12,6 @@ pub struct Board {
     pub items: Vec<Vec<Tile>>
 }
 
-use super::Error;
 impl Board {
     //generates a new Board given a 2d Vec of Strings
     pub fn new(items: Vec<Vec<String>>, attempt: bool) -> Result<Board, Error> {
@@ -58,7 +56,7 @@ impl Board {
             let message = "Board is not 9 rows".to_string();
             return Err(Error::new(message, line, file))
         }
-        //It is given by the CSV crate that every row is the same length
+        //It is given by the CSV crate that every row is the same length, so we just have to check the first row
         if board[0].len() != 9 {
             let line = line!()-1;
             let file = file!().to_string();
@@ -71,7 +69,6 @@ impl Board {
         })
     }
 
-    //iterates through a reference to the board's tiles, printing them out
     pub fn display(&self) {
         for i in &self.items {
             for j in i {
