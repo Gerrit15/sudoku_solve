@@ -141,7 +141,9 @@ abundent white space, and will not be loaded properly and is formatted this way 
   9, 9, 9, 9, 9, 9, 9, 9, 9\\
 \end{center}
 Notice that the board has a hole in the 4th column 3rd row, and due to this it will be loaded as a Vec$<>$ of it's possabilities. If the -a flag is set, then 
-during the loading process the program will try to load the first number it can find, assuming it's within the board.
+during the loading process the program will try to load the first number it can find, assuming it's within the board. Some CSVs can have a header row, a row at the start that might 
+be used, well, as a header for whatever spreadsheet it was exported from. If this is the case, the -h flag will acount for it. 
+
 \section{Running, Tests}
 This project is run the same as any other Rust projects, using "cargo run". That being said, it does have one required argument: the path of a file, to load as a CSV.
 It also has a few optional arguments, such as -v for verbose outputs and -a for attempting a little harder to load tiles. The full list can be viewed with either -h or --help.
