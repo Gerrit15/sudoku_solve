@@ -120,7 +120,15 @@ fn attempt() {
         ]
     };
     assert_eq!(board.unwrap(), b2);
+}
 
+#[test]
+fn invalid_path() {
+    let args = arg_gen("test_csvs/uh-oh.missing", false, false);
+     match load_board(args) {
+        Ok(_) => panic!("returned a valid board"),
+        Err(b) => assert_eq!(&b.message, "No such file or directory (os error 2)")
+    }
 }
 
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
