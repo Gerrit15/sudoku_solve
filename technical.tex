@@ -30,9 +30,8 @@
 \begin{document}
 \maketitle
 \section{Introduction}
-This project exists to take an input file containing an 
-(unsolved) sudoku board, and solve it. This will be a command 
-line application developed mainly in the Rust language.
+This project takes an input file containing an 
+(unsolved) sudoku board in the form of a CSV, and solve it, using Rustlang. This document is made with \LaTeX.
 \section{Goals}
 \begin{enumerate}
   \item Command line input
@@ -106,10 +105,47 @@ Because of the Rust compiler and the Rust Foundation's clear stance on what idio
 For example, variables in snake\_case, UpperCamelCase for data structures, SCREAMING\_SNAKE\_CASE for statics, etc. If something isn't idiomatically named, the 
 Rust compiler will throw a warning. As with most Rust projects, defining what pardigm is in use is difficult, as Rust provides optionality for everything 
 from (something like) OOP to (something like) functional programming. This project will use mainly a OOP design pattern, basing around data 
-strucutres, however useful functional features such as closures are encouraged.
-Discussing the use of specific crates, command line input should be managed by the Clap crate, I/O should be 
-managed by the Serde crate and whatever format crate is relevant (likely the CSV crate.) If GPU acceleration is achievable within a given timeframe, 
-it seems that the crate WGPU is the most advanced one in rust for GLSL compilation. What is likely easiest to do, in 
-concrete terms, is to load in a CSV to a struct containing a 2D Vector of an enum that has two states: u8 and a Vector of u8, and iterate 
-over that using wave function collapse. Note that Serde will require a custom deserialization.
+structures and associated methods, however useful functional features such as closures are encouraged.
+Discussing the use of specific crates, command line input is managed by the Clap crate and I/O is managed by the CSV crate. 
+If GPU acceleration is achievable within the given timeframe, it seems that the crate WGPU is the most advanced one in rust for GLSL compilation. 
+\section{Errors}
+Rust does its very best not to error, and slightly less then it's best not to panic. To achieve this, any time a operation might not complete its 
+operation it returns the Result enum, in the form of either Ok() or Err(). This is dandy for an aspiring programmer, however different Rust creates (or even sub sections inside
+of the standard library) return different, non-uniform types inside the Err(). To avoid issues with unknown types, whenever an error needs to be returned, it should be transformed into the Error struct
+provided in error.rs. 
+\section{File Formatting}
+As of this moment, the executable does not care if the tiles are in order. That being said, it does have some specifications to properly load in a CSV. Firstly, actually using a CSV.
+CSV stands for Comma Seperated Value, where each cell in the spreadsheet (CSVs can be thought of spreadsheet's file format, like bitmap for an image) is represented by a value followed by a comma:\\
+\begin{center}
+  1, 1, 1, 1, 1, 1, 1, 1, 1\\
+  2, 2, 2, 2, 2, 2, 2, 2, 2\\
+  3, 3, 3, 3, 3, 3, 3, 3, 3\\
+  4, 4, 4, 4, 4, 4, 4, 4, 4\\
+  5, 5, 5, 5, 5, 5, 5, 5, 5\\
+  6, 6, 6, 6, 6, 6, 6, 6, 6\\
+  7, 7, 7, 7, 7, 7, 7, 7, 7\\
+  8, 8, 8, 8, 8, 8, 8, 8, 8\\
+  9, 9, 9, 9, 9, 9, 9, 9, 9\\
+\end{center}
+Note that this table is 9 rows long, and is 9 columns wide, this is the format that will be loaded properly, as it is the format of a sudoku board. However, also note that this board has 
+abundent white space, and will not be loaded properly and is formatted this way for visability. This board (with whitespace trimmed) would go directly into memory in this format, however if the board has holes, like so:\\
+\begin{center}
+  1, 1, 1, 1, 1, 1, 1, 1, 1\\
+  2, 2, 2, 2, 2, 2, 2, 2, 2\\
+  3, 3, 3,  , 3, 3, 3, 3, 3\\
+  4, 4, 4, 4, 4, 4, 4, 4, 4\\
+  5, 5, 5, 5, 5, 5, 5, 5, 5\\
+  6, 6, 6, 6, 6, 6, 6, 6, 6\\
+  7, 7, 7, 7, 7, 7, 7, 7, 7\\
+  8, 8, 8, 8, 8, 8, 8, 8, 8\\
+  9, 9, 9, 9, 9, 9, 9, 9, 9\\
+\end{center}
+Notice that the board has a hole in the 4th column 3rd row, and due to this it will be loaded as a Vec$<>$ of it's possabilities. If the -a flag is set, then 
+during the loading process the program will try to load the first number it can find, assuming it's within the board. Some CSVs can have a header row, a row at the start that might 
+be used, well, as a header for whatever spreadsheet it was exported from. If this is the case, the -h flag will acount for it. 
+
+\section{Running, Tests}
+This project is run the same as any other Rust projects, using "cargo run". That being said, it does have one required argument: the path of a file, to load as a CSV.
+It also has a few optional arguments, such as -v for verbose outputs and -a for attempting a little harder to load tiles. The full list can be viewed with either -h or --help.
+As with running, tests are run as usual, with "cargo test" and are located in tests.rs.
 \end{document}

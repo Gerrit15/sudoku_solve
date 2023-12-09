@@ -1,79 +1,88 @@
-// Thoughts: 
-//  - errors are not really handled much
-//      - that includes making sure the file and format is correct
-//      - that includes clap parameters
-//  - serde is gonna take some work
-//  - managing column and row groups shouldn't be difficult, but the square
-//    groups is going to require finesse
-
-use std::fs::File;
-use std::path::PathBuf;
+mod board;
+mod args;
+mod error;
+use board::Board;
+use args::Args;
 use clap::Parser;
+use error::Error;
 
-fn main () {
+#[cfg(test)]
+mod tests;
+
+fn main() {
     let args = Args::parse();
-
-    let path = args.path.to_str().unwrap().to_owned();
-    let file = File::open(path).unwrap();
-
-    //load in a CSV, use crate to unwrap it, pull out rows, push them into items at Tiles
-    let mut rdr = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
-    let mut items = vec![];
-    for result in rdr.deserialize() {
-        let record: Vec<String> = result.unwrap();
-        let mut row = vec![];
-        for i in record {
-            match i.parse::<u8>() {
-                Ok(x) => row.push(Tile::Num(x)),
-                _ => row.push(Tile::Non(vec![1, 2, 3]))
-            }
+    let verbose = args.verbose;
+    let result = run(args);
+    match result {
+        Ok(()) => (),
+        Err(e) => {
+            if verbose {println!("{}\nLine {}, in {}", e.message, e.line, e.file)}
+            else {println!("{}", e.message)}
         }
-        items.push(row);
     }
+}
 
-    let board = Board{items};
-    let mut ok = true;
-    if board.items.len() != 9 {ok = false}
-    for i in &board.items {
-        if i.len() != 9 {ok = false}
+//The reason for a run function is that using return statements can cause the function to return
+//prematurely, meaning that code doesn't get increasing nested. Otherwise, this functions nearly
+//identical to main
+fn run(args: Args) -> Result<(), Error> {
+    let board = match load_board(args.clone()){
+        Ok(b) => b,
+        Err(e) => {
+            let line = line!()-3;
+            let file = file!().to_string();
+            let message = match args.verbose {
+                //make sure to account for verbose
+                true => "Oops! Couldn't load CSV!\n".to_string() + &e.message,
+                false => "Oops! Couldn't load CSV!".to_string()
+            };
+            //println!("Oops! Couldn't load CSV!");
+            return Err(Error::new(message, line, file))
+        }
+    };
+    if args.verbose {board.display()}
+
+    Ok(())
+}
+
+pub fn load_board(args: Args) -> Result<Board, Error> {
+    //This is give None if it couldn't turn the path into a string
+    let path = match args.path.to_str() {
+        Some(x) => x.to_owned(),
+        None => {
+            let line = line!()-3;
+            let file = file!().to_string();
+            let message = "Failed to parse path".to_string();
+            return Err(Error::new(message, line, file))
+        }
     };
 
-    println!("Is board correct? {}", ok);
-    board.display();
-}
-
-struct Board{
-    items: Vec<Vec<Tile>>
-}
-impl Board {
-    fn display(&self) {
-        for i in &self.items {
-            for j in i {
-                match j {
-                    Tile::Num(x) => print!("{x}, "),
-                    Tile::Non(x) => print!("{:?}, ", x)
-                }
-            }
-            println!("");
+    //This will Err<t> if the path provided doesn't have a destination
+    let file = match std::fs::File::open(path) {
+        Ok(x) => x,
+        Err(e) => {
+            let line = line!()-3;
+            let file = file!().to_string();
+            let mut message = e.to_string();
+            if args.verbose {message = message + "\n" + &e.kind().to_string()}
+            return Err(Error::new(message, line, file))
         }
+    };
+
+    let mut csv_reader = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
+    let mut board = vec![];
+    
+    //This will Err<t> if the provided file doesn't go well.
+    for i in csv_reader.deserialize() {
+        let record: Vec<String> = match i {
+            Ok(x) => x,
+            Err(e) => { 
+                let line = line!()-4;
+                let file = file!().to_string();
+                return Err(Error::new(e.to_string(), line, file));
+            }
+        };
+        board.push(record);
     }
-}
-
-//This allows each tile to either be in a single state or ... more
-enum Tile {
-    Num(u8),
-    Non(Vec<u8>)
-}
-
-//Clap arguements. 
-
-///TODO: description
-#[derive(Parser)]
-struct Args {
-    ///Directory of the Sudoku board
-    path: PathBuf,
-    //
-    ///Does the CSV have a header?
-    #[arg(short, long)]
-    contains_header: bool
+    Board::new(board, args.attempt)
 }
