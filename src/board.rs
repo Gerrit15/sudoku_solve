@@ -79,7 +79,7 @@ impl Board {
         let x = x1 - 1;
         let y = y1 - 1;
         let mut row = vec![];
-        for i in 1..10 {
+        for i in 1..9 {
             if i != x {
                 match self.items[y][i] {
                     Tile::Num(n) => {
