@@ -69,7 +69,6 @@ impl Board {
         })
     }
 
-    //This function will not check for out of bounds errors
     pub fn get_row(&self, x1: usize, y1: usize) -> Result<Vec<u8>, Error> {
         if x1 < 1 || x1 > 9 || y1 < 1 || y1 > 9 {
             let line = line!()-1;
