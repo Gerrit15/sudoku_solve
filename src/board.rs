@@ -96,6 +96,34 @@ impl Board {
         Ok(row)
     }
 
+    pub fn get_column(&self, x1: usize, y1: usize) -> Result<Vec<u8>, Error> {
+        if x1 < 1 || x1 > 9 || y1 < 1 || y1 > 9 {
+            let line = line!()-1;
+            let file = file!().to_string();
+            return Err(Error::new("Index is out of bounds".to_owned(), line, file))
+        }
+        let x = x1 - 1;
+        let y = y1 - 1;
+        let mut row = vec![];
+        for i in 1..9 {
+            if i != y {
+                match self.items[i][x] {
+                    Tile::Num(n) => {
+                        if !row.contains(&n) {row.push(n)}
+                        else {
+                            let line = line!()-2;
+                            let file = file!().to_owned();
+                            return Err(Error::new("Column contains duplicates".to_string(), line, file))
+                        }
+                    },
+                    Tile::Non(_) => ()
+                }
+            }
+        }
+
+        Ok(row)
+    }
+
     pub fn display(&self) {
         for i in &self.items {
             for j in i {
