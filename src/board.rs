@@ -124,6 +124,38 @@ impl Board {
         Ok(row)
     }
 
+    pub fn get_square(&self, x1:usize, y1: usize) -> Result<Vec<u8>, Error> {
+        if x1 < 1 || x1 > 9 || y1 < 1 || y1 > 9 {
+            let line = line!()-1;
+            let file = file!().to_string();
+            return Err(Error::new("Index is out of bounds".to_owned(), line, file))
+        }
+        let x = x1 - 1;
+        let y = y1 - 1;
+        let squarex = ((x1 as f64/3 as f64).ceil() as usize) * 3 - 1;
+        let squarey = ((y1 as f64 /3 as f64).ceil() as usize) * 3 - 1;
+        let mut square = vec![];
+
+        for i in (squarex-1)..(squarex+1) {
+            for j in (squarey-1)..(squarey+1) {
+                match self.items[j][i] {
+                    Tile::Non(_) => (),
+                    Tile::Num(n) => {
+                        if i != x && j != y {
+                            if !square.contains(&n) {square.push(n)}
+                            else {
+                                let line = line!()-2;
+                                let file = file!().to_owned();
+                                return Err(Error::new("Square contains duplicates".to_string(), line, file))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Ok(square)
+    }
+
     pub fn display(&self) {
         for i in &self.items {
             for j in i {
