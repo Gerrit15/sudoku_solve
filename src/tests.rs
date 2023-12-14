@@ -18,15 +18,15 @@ fn base_non() {
     let b2 = Board {
         //This is to make sure that the Non is placed in the right spot
         items: vec![
-            vec![Num(1),Non(vec![]),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1)],
-            vec![Num(2),Num(2),Num(2),Non(vec![]),Num(2),Num(2),Num(2),Num(2),Num(2)],
-            vec![Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3)],
-            vec![Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4)],
-            vec![Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5)],
-            vec![Num(6),Num(6),Num(6),Num(6),Num(6),Non(vec![]),Non(vec![]),Num(6),Num(6)],
-            vec![Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7)],
-            vec![Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8)],
-            vec![Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9)],
+            vec![Num(4),Num(3),Num(5),Num(2),Num(6),Num(9),Num(7),Num(8),Num(1)],
+            vec![Num(6),Num(8),Num(2),Num(5),Num(7),Num(1),Non(vec![]),Num(9),Num(3)],
+            vec![Num(1),Num(9),Num(7),Num(8),Num(3),Num(4),Num(5),Num(6),Num(2)],
+            vec![Num(8),Non(vec![]),Num(6),Num(1),Num(9),Num(5),Num(3),Num(4),Num(7)],
+            vec![Num(3),Num(7),Num(4),Num(6),Num(8),Num(2),Num(9),Num(1),Num(5)],
+            vec![Num(9),Num(5),Num(1),Num(7),Num(4),Num(3),Num(6),Num(2),Num(8)],
+            vec![Num(5),Non(vec![]),Num(9),Num(3),Num(2),Num(6),Num(8),Num(7),Num(4)],
+            vec![Num(2),Num(4),Num(8),Num(9),Num(5),Num(7),Num(1),Num(3),Num(6)],
+            vec![Num(7),Num(6),Num(3),Num(4),Num(1),Num(8),Non(vec![]),Num(5),Num(9)],
         ]
     };
     assert_eq!(board.unwrap(), b2);
@@ -106,17 +106,16 @@ fn attempt() {
     let args = arg_gen("test_csvs/attempt.csv", false, true);
     let board = load_board(args);
     let b2 = Board {
-        //This is to make sure that the Non is placed in the right spot
         items: vec![
-            vec![Num(1),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1),Num(1)],
-            vec![Num(2),Num(2),Num(2),Num(2),Num(2),Num(2),Num(2),Num(2),Num(2)],
-            vec![Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3),Num(3)],
-            vec![Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4),Num(4)],
-            vec![Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5),Num(5)],
-            vec![Num(6),Num(6),Num(6),Num(6),Num(6),Num(6),Num(6),Num(6),Num(6)],
-            vec![Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7),Num(7)],
-            vec![Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8),Num(8)],
-            vec![Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Num(9),Non(vec![])],
+            vec![Num(4),Num(3),Num(5),Num(2),Num(6),Num(9),Num(7),Num(8),Num(1)],
+            vec![Num(6),Num(8),Num(2),Num(5),Num(7),Num(1),Num(4),Num(9),Num(3)],
+            vec![Num(1),Num(9),Num(7),Num(8),Num(3),Num(4),Num(5),Num(6),Num(2)],
+            vec![Num(8),Num(2),Num(6),Num(1),Num(9),Num(5),Num(3),Num(4),Num(7)],
+            vec![Num(3),Num(7),Num(4),Num(6),Num(8),Num(2),Num(9),Num(1),Num(5)],
+            vec![Num(9),Num(5),Num(1),Num(7),Num(4),Num(3),Num(6),Num(2),Num(8)],
+            vec![Num(5),Non(vec![]),Num(9),Num(3),Num(2),Num(6),Num(8),Num(7),Num(4)],
+            vec![Num(2),Num(4),Num(8),Num(9),Num(5),Num(7),Num(1),Num(3),Num(6)],
+            vec![Num(7),Num(6),Num(3),Num(4),Num(1),Num(8),Non(vec![]),Num(5),Num(9)],
         ]
     };
     assert_eq!(board.unwrap(), b2);
