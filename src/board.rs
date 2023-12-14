@@ -146,7 +146,12 @@ impl Board {
                 match self.items[j][i] {
                     Tile::Num(n) => {
                         if !(j==y && i == x) {
-                            square.push(n)
+                            if !square.contains(&n) {square.push(n)}
+                            else {
+                                let line = line!()-2;
+                                let file = file!().to_owned();
+                                return Err(Error::new("Square contains duplicates".to_string(), line, file))
+                            }
                         }
                     },
                     Tile::Non(_) => ()
