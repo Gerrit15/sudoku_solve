@@ -64,9 +64,31 @@ impl Board {
             return Err(Error::new(message, line, file))
         }
 
-        Ok(Board {
+        let board = Board {
             items: board
-        })
+        };
+
+        for i in 1..10 {
+            match board.get_row(1, i) {
+                Ok(_) => (),
+                Err(e) => return Err(e)
+            }
+            match board.get_column(i, 2) {
+                Ok(_) => (),
+                Err(e) => return Err(e)
+            }
+        }
+
+        for i in [1,5,9] {
+            for j in [1,5,9] {
+                match board.get_column(i, j) {
+                    Ok(_) => (),
+                    Err(e) => return Err(e)
+                }
+            }
+        }
+
+        Ok(board)
     }
 
     pub fn get_row(&self, x1: usize, y1: usize) -> Result<Vec<u8>, Error> {
