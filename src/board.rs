@@ -136,8 +136,12 @@ impl Board {
         let squarey = ((y1 as f64 /3 as f64).ceil() as usize) * 3 - 1;
         let mut square = vec![];
 
-        for i in (squarex-1)..(squarex+1) {
-            for j in (squarey-1)..(squarey+1) {
+        //for i in (squarex-1)..(squarex+2) {
+        //    print!("{i}")
+        //}
+
+        for i in (squarex-1)..(squarex+2) {
+            for j in (squarey-1)..(squarey+2) {
                 match self.items[j][i] {
                     Tile::Non(_) => (),
                     Tile::Num(n) => {
