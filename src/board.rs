@@ -132,6 +132,11 @@ impl Board {
         }
         let x = x1 - 1;
         let y = y1 - 1;
+
+        //So we take the human position of the tile (ex 1,1 is the top and leftmost tile), and 
+        //perform the inner operation: ceil(n/3) to get the "index" of the square (ex the bottom
+        //rightmost square is (3, 3), then the outer operation: n*3-2 is performed to get the computer
+        //position of the middle tile in the square
         let squarex = ((x1 as f64 /3 as f64).ceil() as usize) * 3 - 2;
         let squarey = ((y1 as f64 /3 as f64).ceil() as usize) * 3 - 2;
         let mut square = vec![];
