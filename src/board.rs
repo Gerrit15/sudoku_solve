@@ -132,31 +132,23 @@ impl Board {
         }
         let x = x1 - 1;
         let y = y1 - 1;
-        let squarex = ((x1 as f64/3 as f64).ceil() as usize) * 3 - 1;
-        let squarey = ((y1 as f64 /3 as f64).ceil() as usize) * 3 - 1;
+        let squarex = ((x1 as f64 /3 as f64).ceil() as usize) * 3 - 2;
+        let squarey = ((y1 as f64 /3 as f64).ceil() as usize) * 3 - 2;
         let mut square = vec![];
-
-        //for i in (squarex-1)..(squarex+2) {
-        //    print!("{i}")
-        //}
 
         for i in (squarex-1)..(squarex+2) {
             for j in (squarey-1)..(squarey+2) {
                 match self.items[j][i] {
-                    Tile::Non(_) => (),
                     Tile::Num(n) => {
-                        if i != x && j != y {
-                            if !square.contains(&n) {square.push(n)}
-                            else {
-                                let line = line!()-2;
-                                let file = file!().to_owned();
-                                return Err(Error::new("Square contains duplicates".to_string(), line, file))
-                            }
+                        if !(j==y && i == x) {
+                            square.push(n)
                         }
-                    }
+                    },
+                    Tile::Non(_) => ()
                 }
             }
         }
+
         Ok(square)
     }
 
