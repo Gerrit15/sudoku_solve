@@ -148,6 +148,13 @@ fn column_dupes() {
     }
 }
 
+/*
+* This function exists as a reminder:
+*   There is no way for there to be a square duplicate without 
+*   being caught by a row or column. This test is unneeded.
+#[test]
+fn square_dupes() {
+}*/
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
 fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
     Args {
