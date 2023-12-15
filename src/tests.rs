@@ -1,7 +1,6 @@
 use super::{Args, Board, board::Tile, load_board};
 use std::path::PathBuf;
 
-//To make sure a basic board is loaded in properly
 #[test]
 fn base_load() {
     let args = arg_gen("test_csvs/base.csv", false, false);
@@ -9,8 +8,8 @@ fn base_load() {
     assert!(matches!(board, Ok(_)));
 }
 
-//To confirm that a board with (proper) holes can be loaded properly
 #[test]
+//non as in Tile:Non(Vec<u8>)
 fn base_non() {
     use Tile::*;
     let args = arg_gen("test_csvs/non.csv", false, false);
@@ -32,7 +31,6 @@ fn base_non() {
     assert_eq!(board.unwrap(), b2);
 }
 
-//To confirm files with headers can be loaded
 #[test]
 fn header() {
     let args = arg_gen("test_csvs/header.csv", true, false);
@@ -40,7 +38,6 @@ fn header() {
     assert!(matches!(board, Ok(_)));
 }
 
-//To confirm that a board that's too tall (too many rows) isn't loaded in
 #[test]
 fn too_tall() {
     let args = arg_gen("test_csvs/long.csv", false, false);
@@ -50,7 +47,6 @@ fn too_tall() {
     }
 }
 
-//To confirm that a board that's too short (not enough rows) isn't loaded in
 #[test]
 fn too_short() {
     let args = arg_gen("test_csvs/short.csv", false, false);
@@ -60,7 +56,6 @@ fn too_short() {
     }
 }
 
-//To confirm that a board that's too wide (too many columns) isn't loaded
 #[test]
 fn too_wide() {
     let args = arg_gen("test_csvs/wide.csv", false, false);
@@ -70,7 +65,6 @@ fn too_wide() {
     }
 }
 
-//To confirm that a board that's too narrow (not enough columns) isn't loaded
 #[test]
 fn too_narrow() {
     let args = arg_gen("test_csvs/narrow.csv", false, false);
@@ -80,7 +74,6 @@ fn too_narrow() {
     }
 }
 
-//To confirm that a board that contains numbers greater then 9 isn't loaded
 #[test]
 fn out_of_bounds() {
     let args = arg_gen("test_csvs/out_of_bound.csv", false, false);
@@ -90,7 +83,6 @@ fn out_of_bounds() {
     }
 }
 
-//To confirm that a board with non uniform width isn't loaded
 #[test]
 fn non_uniform() {
     let args = arg_gen("test_csvs/non_uniform.csv", false, false);
@@ -156,6 +148,7 @@ fn square_dupes() {
         Err(b) => assert_eq!(&b.message, "Square contains duplicates")
     }
 }
+
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
 fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
     Args {
