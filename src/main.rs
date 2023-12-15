@@ -32,11 +32,9 @@ fn run(args: Args) -> Result<(), Error> {
             let line = line!()-3;
             let file = file!().to_string();
             let message = match args.verbose {
-                //make sure to account for verbose
                 true => "Oops! Couldn't load CSV!\n".to_string() + &e.message,
                 false => "Oops! Couldn't load CSV!".to_string()
             };
-            //println!("Oops! Couldn't load CSV!");
             return Err(Error::new(message, line, file))
         }
     };
@@ -46,7 +44,6 @@ fn run(args: Args) -> Result<(), Error> {
 }
 
 pub fn load_board(args: Args) -> Result<Board, Error> {
-    //This is give None if it couldn't turn the path into a string
     let path = match args.path.to_str() {
         Some(x) => x.to_owned(),
         None => {
@@ -57,7 +54,6 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
         }
     };
 
-    //This will Err<t> if the path provided doesn't have a destination
     let file = match std::fs::File::open(path) {
         Ok(x) => x,
         Err(e) => {
@@ -72,7 +68,6 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
     let mut csv_reader = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
     let mut board = vec![];
     
-    //This will Err<t> if the provided file doesn't go well.
     for i in csv_reader.deserialize() {
         let record: Vec<String> = match i {
             Ok(x) => x,

@@ -6,14 +6,12 @@ pub enum Tile {
     Non(Vec<u8>)
 }
 
-//a simple 2d data structure to hold the sudoku board
 #[derive(PartialEq, Debug)]
 pub struct Board {
     pub items: Vec<Vec<Tile>>
 }
 
 impl Board {
-    //generates a new Board given a 2d Vec of Strings
     pub fn new(items: Vec<Vec<String>>, attempt: bool) -> Result<Board, Error> {
         let mut board = vec![];
         for i in items {
@@ -34,7 +32,7 @@ impl Board {
                             let mut found = false;
                             //If it needs to attempt a little harder, will try to find the first
                             //number between 1 and 9 in each item, for example "thisis923lalala"
-                            //will become 9
+                            //will become 9. Note that 48410 will become 1, not 4.
                             for k in 1..10 {
                                 if j.contains(&k.to_string()) && !found {
                                     row.push(Tile::Num(k));
@@ -56,6 +54,7 @@ impl Board {
             let message = "Board is not 9 rows".to_string();
             return Err(Error::new(message, line, file))
         }
+        
         //It is given by the CSV crate that every row is the same length, so we just have to check the first row
         if board[0].len() != 9 {
             let line = line!()-1;
