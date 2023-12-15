@@ -130,6 +130,15 @@ fn invalid_path() {
     }
 }
 
+#[test]
+fn row_dupes() {
+    let args = arg_gen("test_csvs/row_dupe.csv", false, false);
+     match load_board(args) {
+        Ok(_) => panic!("returned a valid board"),
+        Err(b) => assert_eq!(&b.message, "Row contains duplicates")
+    }
+}
+
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
 fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
     Args {
