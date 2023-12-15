@@ -73,7 +73,7 @@ impl Board {
                 Ok(_) => (),
                 Err(e) => return Err(e)
             }
-            match board.get_column(i, 2) {
+            match board.get_column(i, 1) {
                 Ok(_) => (),
                 Err(e) => return Err(e)
             }
@@ -100,11 +100,12 @@ impl Board {
         let x = x1 - 1;
         let y = y1 - 1;
         let mut row = vec![];
-        for i in 1..9 {
+        for i in 0..9 {
             if i != x {
                 match self.items[y][i] {
                     Tile::Num(n) => {
-                        if !row.contains(&n) && Tile::Num(n) != self.items[x][y] {row.push(n)}
+                        //println!("VEC: {:?}, TRYING TO PUSH: {n}", &row);
+                        if !row.contains(&n) && (Tile::Num(n) != self.items[y][x]) {row.push(n)}
                         else {
                             let line = line!()-2;
                             let file = file!().to_string();
@@ -131,7 +132,7 @@ impl Board {
             if i != y {
                 match self.items[i][x] {
                     Tile::Num(n) => {
-                        if !row.contains(&n) && Tile::Num(n) != self.items[x][y] {row.push(n)}
+                        if !row.contains(&n) && (Tile::Num(n) != self.items[y][x]) {row.push(n)}
                         else {
                             let line = line!()-2;
                             let file = file!().to_owned();
@@ -168,7 +169,7 @@ impl Board {
                 match self.items[j][i] {
                     Tile::Num(n) => {
                         if !(j==y && i == x) {
-                            if !square.contains(&n) && Tile::Num(n) != self.items[x][y] {square.push(n)}
+                            if !square.contains(&n) && Tile::Num(n) != self.items[y][x] {square.push(n)}
                             else {
                                 let line = line!()-2;
                                 let file = file!().to_owned();
