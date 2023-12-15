@@ -78,9 +78,10 @@ impl Board {
             }
         }
 
+        
         for i in [1,5,9] {
             for j in [1,5,9] {
-                match board.get_column(i, j) {
+                match board.get_square(i, j) {
                     Ok(_) => (),
                     Err(e) => return Err(e)
                 }
