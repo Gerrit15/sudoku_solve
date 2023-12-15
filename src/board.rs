@@ -104,7 +104,7 @@ impl Board {
             if i != x {
                 match self.items[y][i] {
                     Tile::Num(n) => {
-                        if !row.contains(&n) {row.push(n)}
+                        if !row.contains(&n) && Tile::Num(n) != self.items[x][y] {row.push(n)}
                         else {
                             let line = line!()-2;
                             let file = file!().to_string();
@@ -131,7 +131,7 @@ impl Board {
             if i != y {
                 match self.items[i][x] {
                     Tile::Num(n) => {
-                        if !row.contains(&n) {row.push(n)}
+                        if !row.contains(&n) && Tile::Num(n) != self.items[x][y] {row.push(n)}
                         else {
                             let line = line!()-2;
                             let file = file!().to_owned();
@@ -168,7 +168,7 @@ impl Board {
                 match self.items[j][i] {
                     Tile::Num(n) => {
                         if !(j==y && i == x) {
-                            if !square.contains(&n) {square.push(n)}
+                            if !square.contains(&n) && Tile::Num(n) != self.items[x][y] {square.push(n)}
                             else {
                                 let line = line!()-2;
                                 let file = file!().to_owned();
