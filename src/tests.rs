@@ -148,13 +148,14 @@ fn column_dupes() {
     }
 }
 
-/*
-* This function exists as a reminder:
-*   There is no way for there to be a square duplicate without 
-*   being caught by a row or column. This test is unneeded.
 #[test]
 fn square_dupes() {
-}*/
+     let args = arg_gen("test_csvs/square_dupe.csv", false, false);
+     match load_board(args) {
+        Ok(_) => panic!("returned a valid board"),
+        Err(b) => assert_eq!(&b.message, "Square contains duplicates")
+    }
+}
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
 fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
     Args {
