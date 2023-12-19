@@ -156,7 +156,7 @@ fn collapse_single() {
         Ok(b) => b,
         Err(_) => panic!("Returned bad board")
     };
-    assert_eq!(board.collapse(8, 1), Ok(Tile::Non(vec![1, 2, 8])));
+    assert_eq!(board.collapse_tile(8, 1), Ok(Tile::Non(vec![1, 2, 8])));
 }
 
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.

@@ -185,7 +185,7 @@ impl Board {
         Ok(square)
     }
 
-    pub fn collapse(&self, x: usize, y: usize) -> Result<Tile, Error> {
+    pub fn collapse_tile(&self, x: usize, y: usize) -> Result<Tile, Error> {
         let row = match self.get_row(x, y) {
             Ok(x) => x,
             Err(e) => return Err(e)
@@ -216,6 +216,8 @@ impl Board {
 
         Ok(Tile::Non(state))
     }
+
+    //
 
     pub fn display(&self) {
         for i in &self.items {
