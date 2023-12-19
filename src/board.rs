@@ -217,7 +217,22 @@ impl Board {
         Ok(Tile::Non(state))
     }
 
-    //
+    pub fn collapse_board(mut board: Board) -> Result<Board, Error> {
+        for i in 1..=9 {
+            for j in 1..=9 {
+                match &board.items[j][i] {
+                    Tile::Non(_) => {
+                        board.items[j][i] = match board.collapse_tile(i, j) {
+                            Ok(x) => x,
+                            Err(e) => return Err(e)
+                        }
+                    },
+                    _ => ()
+                }
+            }
+        }
+        Ok(board)
+    }
 
     pub fn display(&self) {
         for i in &self.items {
