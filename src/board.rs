@@ -185,6 +185,38 @@ impl Board {
         Ok(square)
     }
 
+    pub fn collapse(&self, x: usize, y: usize) -> Result<Tile, Error> {
+        let row = match self.get_row(x, y) {
+            Ok(x) => x,
+            Err(e) => return Err(e)
+        };
+        let column = match self.get_column(x, y) {
+            Ok(x) => x,
+            Err(e) => return Err(e)
+        };
+        let square = match self.get_square(x, y) {
+            Ok(x) => x,
+            Err(e) => return Err(e)
+        };
+        let mut state: Vec<u8> = vec![];
+        for i in 1..=9 {
+            if !(row.contains(&i) || column.contains(&i) || square.contains(&i)) {
+                state.push(i)
+            }
+        }
+        if state.len() == 1 {
+            return Ok(Tile::Num(state[0]))
+        }
+        else if state.len() == 0 {
+            let line = line!()-1;
+            let file = file!().to_string();
+            let message = "Collapse could not find any possible state".to_string();
+            return Err(Error::new(message, line, file))
+        }
+
+        Ok(Tile::Non(state))
+    }
+
     pub fn display(&self) {
         for i in &self.items {
             for j in i {
