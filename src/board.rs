@@ -1,12 +1,12 @@
 use super::Error;
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Clone, Debug)]
 pub enum Tile {
     Num(u8),
     Non(Vec<u8>)
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Clone, Debug)]
 pub struct Board {
     pub items: Vec<Vec<Tile>>
 }

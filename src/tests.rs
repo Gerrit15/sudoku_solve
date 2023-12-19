@@ -166,7 +166,7 @@ fn collapse_board() {
         Ok(b) => b,
         Err(_) => panic!("Returned bad board")
     };
-    let board = match Board::collapse_board(board) {
+    let board = match board.collapse_board() {
         Ok(b) => b,
         Err(_) => panic!("Could not collapse board")
     };
