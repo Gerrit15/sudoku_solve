@@ -40,6 +40,11 @@ fn run(args: Args) -> Result<(), Error> {
     };
     if args.verbose {board.display()}
 
+    match board.solve(None) {
+        Ok(x) => {x.0.display()},
+        Err(e) => return Err(e)
+    }
+
     Ok(())
 }
 
