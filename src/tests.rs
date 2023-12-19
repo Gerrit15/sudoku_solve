@@ -159,6 +159,35 @@ fn collapse_single() {
     assert_eq!(board.collapse_tile(8, 1), Ok(Tile::Non(vec![1, 2, 8])));
 }
 
+#[test]
+fn collapse_board() {
+    let args = arg_gen("test_csvs/collapse_single.csv", false, false);
+    let board = match load_board(args) {
+        Ok(b) => b,
+        Err(_) => panic!("Returned bad board")
+    };
+    let board = match Board::collapse_board(board) {
+        Ok(b) => b,
+        Err(_) => panic!("Could not collapse board")
+    };
+    use Tile::*;
+    let b2 = Board {
+        //This is to make sure that the Non is placed in the right spot
+        items: vec![
+            vec![Num(4),Num(3),Num(5),Num(2),Num(6),Num(9),Num(7),Non(vec![1,8]),Num(1)],
+            vec![Num(6),Num(8),Num(2),Num(5),Num(7),Num(1),Num(4),Num(9),Num(3)],
+            vec![Num(1),Num(9),Num(7),Num(8),Num(3),Num(4),Num(5),Num(6),Num(2)],
+            vec![Num(8),Num(2),Num(6),Num(1),Num(9),Num(5),Num(3),Num(4),Num(7)],
+            vec![Num(3),Num(7),Num(4),Num(6),Num(8),Num(2),Num(9),Num(1),Num(5)],
+            vec![Num(9),Num(5),Num(1),Num(7),Num(4),Num(3),Num(6),Num(2),Num(8)],
+            vec![Num(5),Num(1),Num(9),Num(3),Num(2),Num(6),Num(8),Num(7),Num(4)],
+            vec![Num(2),Num(4),Num(8),Num(9),Num(5),Num(7),Num(1),Num(3),Num(6)],
+            vec![Num(7),Num(6),Num(3),Num(4),Num(1),Num(8),Num(2),Num(5),Num(9)],
+        ]
+    };
+    assert_eq!(board, b2);
+}
+
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
 fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
     Args {
