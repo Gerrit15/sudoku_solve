@@ -1,5 +1,5 @@
 use super::{Args, Board, board::Tile, load_board};
-use std::path::PathBuf;
+use std::{path::PathBuf, env::args};
 
 #[test]
 fn base_load() {
@@ -147,6 +147,16 @@ fn square_dupes() {
         Ok(_) => panic!("returned a valid board"),
         Err(b) => assert_eq!(&b.message, "Square contains duplicates")
     }
+}
+
+#[test]
+fn collapse_single() {
+    let args = arg_gen("test_csvs/collapse_single.csv", false, false);
+    let board = match load_board(args) {
+        Ok(b) => b,
+        Err(_) => panic!("Returned bad board")
+    };
+    assert_eq!(board.collapse(8, 1), Ok(Tile::Non(vec![1, 2, 8])));
 }
 
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
