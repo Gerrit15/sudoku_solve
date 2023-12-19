@@ -220,9 +220,9 @@ impl Board {
     pub fn collapse_board(mut board: Board) -> Result<Board, Error> {
         for i in 1..=9 {
             for j in 1..=9 {
-                match &board.items[j][i] {
+                match &board.items[j-1][i-1] {
                     Tile::Non(_) => {
-                        board.items[j][i] = match board.collapse_tile(i, j) {
+                        board.items[j-1][i-1] = match board.collapse_tile(i, j) {
                             Ok(x) => x,
                             Err(e) => return Err(e)
                         }
