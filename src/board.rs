@@ -217,7 +217,39 @@ impl Board {
         Ok(Tile::Non(state))
     }
 
-    pub fn collapse_board(mut board: Board) -> Result<Board, Error> {
+    //the bool is whether or not the solving stalled out, eg true if the solving stalled
+    pub fn solve(&self, max_loop: Option<u64>) -> Result<(Board, bool), Error> {
+        let mut previous = self.clone();
+        for _ in 0..max_loop.unwrap_or(u64::MAX){
+            let current = match previous.collapse_board() {
+                Ok(x) => x,
+                Err(e) => return Err(e)
+            };
+            if current == previous {return Ok((current, true))}
+            if current.is_solved() {return Ok((current, false))}
+            previous = current;
+        }
+        let line = line!()-9;
+        let file = file!().to_owned();
+        let message = "Too many iterations :(".to_string();
+        return Err(Error::new(message, line, file))
+    }
+
+    fn is_solved(&self) -> bool {
+        let mut solved = true;
+        for i in &self.items {
+            for j in i {
+                match j {
+                    Tile::Num(_) => (),
+                    Tile::Non(_) => solved = false,
+                }
+            }
+        }
+        solved
+    }
+
+    pub fn collapse_board(&self) -> Result<Board, Error> {
+        let mut board = self.clone();
         for i in 1..=9 {
             for j in 1..=9 {
                 match &board.items[j-1][i-1] {
