@@ -1,6 +1,7 @@
 mod board;
 mod args;
 mod error;
+mod board_gen;
 use board::Board;
 use args::Args;
 use clap::Parser;
@@ -39,6 +40,7 @@ fn run(args: Args) -> Result<(), Error> {
         }
     };
     if args.verbose {board.display()}
+    println!();
 
     match board.solve(None) {
         Ok(x) => {x.0.display()},
