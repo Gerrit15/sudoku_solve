@@ -7,6 +7,7 @@ use std::path::PathBuf;
 use board::Board;
 use args::Args;
 use clap::Parser;
+use csv::Writer;
 use error::Error;
 
 #[cfg(test)]
@@ -125,6 +126,8 @@ pub fn export_board(board: Board, path: Option<PathBuf>) -> Result<(), Error> {
         }
         out_board.push(out_row);
     }
-    println!("{:?}",out_board);
+
+    let mut writer = Writer::from_writer(vec![]);
+    for i in 0..9 {writer.write_record(&out_board[i]).unwrap()};
     Ok(())
 }
