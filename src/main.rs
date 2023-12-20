@@ -2,6 +2,8 @@ mod board;
 mod args;
 mod error;
 mod board_gen;
+use std::path::PathBuf;
+
 use board::Board;
 use args::Args;
 use clap::Parser;
@@ -87,4 +89,42 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
         board.push(record);
     }
     Board::new(board, args.attempt)
+}
+
+pub fn export_board(board: Board, path: Option<PathBuf>) -> Result<(), Error> {
+    let path = match path {
+        Some(x) => {
+            if !x.is_file() {
+                let mut p = PathBuf::new();
+                p.push("./solved_board.csv");
+                p
+            }
+            else {x}
+        },
+        None => {
+            let mut p = PathBuf::new();
+            p.push("./solved_board.csv");
+            p
+        }
+    };
+    let mut out_board: Vec<Vec<String>> = vec![];
+    for i in board.items {
+        let mut out_row = vec![];
+        for j in i {
+            let tile_string = match j {
+                board::Tile::Num(n) => n.to_string(),
+                board::Tile::Non(n) => {
+                    let mut tile = "".to_string();
+                    for k in n {
+                        tile = tile + &k.to_string() + ", "
+                    }
+                    tile
+                },
+            };
+            out_row.push(tile_string);
+        }
+        out_board.push(out_row);
+    }
+    println!("{:?}",out_board);
+    Ok(())
 }
