@@ -32,3 +32,4 @@ pub struct Args {
 //      - In the form of a video or gif? could be a fun stretch goal
 //  - What do do in the event of a branching pathway?
 //  - Generate a board to use?
+//  - Config?
