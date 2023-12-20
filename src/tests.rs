@@ -1,5 +1,5 @@
-use super::{Args, Board, board::Tile, load_board};
-use std::{path::PathBuf, env::args};
+use super::{Args, Board, board::Tile, load_board, board_gen::{gen_board, poke_holes}};
+use std::path::PathBuf;
 
 #[test]
 fn base_load() {
@@ -186,6 +186,16 @@ fn collapse_board() {
         ]
     };
     assert_eq!(board, b2);
+}
+
+#[test]
+fn int_test() {
+    let b = match gen_board() {
+        Ok(b) => b,
+        Err(_) => panic!("Couldn't board gen")
+    };
+    let holey = poke_holes(&b, 40).solve(None).unwrap().0;
+    assert_eq!(b, holey)
 }
 
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
