@@ -17,6 +17,11 @@ Using the cargo build too, clone the repository, the run `cargo build --release`
 To run it, simply put `[path to executable] [path to board] [additional arguements]`. For example: `./sudoku_solve board.csv -v -a`. To view all arguements, 
 run `[path to executable] -h`.
 
+## Limitations
+At the moment, due to the nature of algorithm in use, there are some limitations to what can be solved by the solver. For example, if, after all possible iterations,
+there are still tiles that cannot collapse, then there isn't anything that the algorithm can do. In this situation, the solver will spit out the unfinished 
+board, and human intervention will be required.
+
 ## Goals
 - Command line input
 - Take input files, output files
