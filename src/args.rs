@@ -27,3 +27,4 @@ pub struct Args {
 //  - Displaying Each step/Walking through steps? For solving
 //      - In the form of a video or gif? could be a fun stretch goal
 //  - What do do in the event of a branching pathway?
+//  - Generate a board to use?
