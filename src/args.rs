@@ -19,7 +19,11 @@ pub struct Args {
 
     ///Attempts a little harder to interpret numbers in csv
     #[arg(short, long)]
-    pub attempt: bool
+    pub attempt: bool,
+
+    /// Where to send the output
+    #[arg(short, long)]
+    output: Option<PathBuf>
 }
 
 //Other potential options:
