@@ -1,7 +1,7 @@
 use super::Board;
 use super::board::Tile;
 use super::Error;
-use rand::thread_rng;
+use rand::{thread_rng, Rng};
 use rand::seq::SliceRandom;
 
 pub fn gen_board() -> Result<Board, Error> {
@@ -46,6 +46,27 @@ pub fn gen_board() -> Result<Board, Error> {
         }
     }
     Ok(board)
+}
+
+//returns a board with holes poked in it
+fn poke_holes(board: &Board, num_holes: u32) -> Board {
+    let mut holey = board.clone();
+    let mut rng = thread_rng();
+    for _ in 0..=num_holes {
+        loop {
+            let randx: usize = rng.gen_range(0..9);
+            let randy: usize = rng.gen_range(0..9);
+            let has_value = match holey.items[randy][randx] {
+                Tile::Num(_) => true,
+                Tile::Non(_) => false
+            };
+            if has_value {
+                holey.items[randy][randx] = Tile::Non(vec![]);
+                break
+            }
+        }
+    }
+    holey
 }
 
 fn make_tile(mut row: Vec<u8>) -> Vec<Tile> {
