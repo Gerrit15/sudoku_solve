@@ -29,7 +29,6 @@ pub fn gen_board() -> Result<Board, Error> {
 
     let board = vec![row1, row2, row3, row4, row5, row6, row7, row8, row9];
     let board = Board { items: board };
-    board.display();
     for i in 1..=9 {
         for j in 1..=9 {
             match board.get_row(i, j) {
