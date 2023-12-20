@@ -14,14 +14,14 @@ pub fn gen_board() -> Result<Board, Error> {
     row3.rotate_right(6);
 
     let mut row4 = row1.clone();
-    row4.shuffle(&mut thread_rng());
+    row4.rotate_right(1);
     let mut row5 = row4.clone();
     row5.rotate_right(3);
     let mut row6 = row4.clone();
     row6.rotate_right(6);
 
     let mut row7 = row1.clone();
-    row7.shuffle(&mut thread_rng());
+    row7.rotate_right(2);
     let mut row8 = row7.clone();
     row8.rotate_right(3);
     let mut row9 = row7.clone();
@@ -29,6 +29,7 @@ pub fn gen_board() -> Result<Board, Error> {
 
     let board = vec![row1, row2, row3, row4, row5, row6, row7, row8, row9];
     let board = Board { items: board };
+    board.display();
     for i in 1..=9 {
         for j in 1..=9 {
             match board.get_row(i, j) {
