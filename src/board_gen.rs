@@ -49,7 +49,7 @@ pub fn gen_board() -> Result<Board, Error> {
 }
 
 //returns a board with holes poked in it
-fn poke_holes(board: &Board, num_holes: u32) -> Board {
+pub fn poke_holes(board: &Board, num_holes: u32) -> Board {
     let mut holey = board.clone();
     let mut rng = thread_rng();
     for _ in 0..=num_holes {
