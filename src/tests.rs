@@ -194,7 +194,10 @@ fn int_test() {
         Ok(b) => b,
         Err(_) => panic!("Couldn't board gen")
     };
-    let holey = poke_holes(&b, 40).solve(None).unwrap().0;
+    let holey = match poke_holes(&b, 40).solve(None) {
+        Ok(n) => n.0,
+        Err(_) => panic!("Couldn't solve")
+    };
     assert_eq!(b, holey)
 }
 
