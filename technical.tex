@@ -68,6 +68,18 @@ it sees that in the second column, which $A$ belongs to, there is a 1. Since $A$
 instead the set of all its current possible states is $\{3\}$. Because of this, it's real state is known, and it 
 "collapses" into a single state, namely being 3. Since $A$ is now 3, the set of all of $B$'s states is now simply
 $\{1\}$, meaning it too can collapse into a single state. \\
+Note that this method does have limitations. There is a point where the function breaks down. For example, given this simple board:
+\begin{center}
+\begin{tikzpicture}
+\draw[step=0.5cm,color=gray,xscale=2,yscale=2] (-1,-1) grid (1,1);
+\matrix[matrix of nodes,nodes={inner sep=0pt,text width=1cm,align=center,minimum height=1cm}]{
+4 & A & 2 & B \\
+\_ & \_ & \_ & \_ \\
+\_ & \_ & \_ & \_ \\
+\_ & \_ & \_ & \_\\};
+\end{tikzpicture}
+\end{center}
+In this circumstance there is no way for the algorithm to know the exact state of $A$ or $B$, and thus will require human intervention.
 \section{Large picture process}
 \begin{center}
 \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
