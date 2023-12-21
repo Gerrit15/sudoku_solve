@@ -37,3 +37,5 @@ pub struct Args {
 //  - What do do in the event of a branching pathway?
 //  - Generate a board to use?
 //  - Config?
+//
+//Remember to put more chances for verbose output
