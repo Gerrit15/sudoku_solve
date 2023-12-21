@@ -21,6 +21,10 @@ pub struct Args {
     #[arg(short, long)]
     pub attempt: bool,
 
+    ///Whether or not to override "remove" the file it points to
+    #[arg(short, long)]
+    pub remove: bool,
+
     /// Where to send the output
     #[arg(short, long, value_name="FILE")]
     pub output: Option<PathBuf>

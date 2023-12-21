@@ -208,6 +208,7 @@ fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
         contains_header,
         verbose: false,
         attempt,
+        remove: false,
         output: None
     }
 }

@@ -49,7 +49,7 @@ fn run(args: Args) -> Result<(), Error> {
         Ok(x) => {x.0},
         Err(e) => return Err(e)
     };
-    match export_board(solved_board, args.output) {
+    match export_board(solved_board, args.output, args.remove) {
         Ok(()) => (),
         Err(e) => return Err(e)
     };
@@ -96,10 +96,10 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
     Board::new(board, args.attempt)
 }
 
-pub fn export_board(board: Board, path: Option<PathBuf>) -> Result<(), Error> {
+pub fn export_board(board: Board, path: Option<PathBuf>, rewrite: bool) -> Result<(), Error> {
     let path = match path {
         Some(x) => {
-            if !x.is_file() {
+            if x.exists() && !rewrite {
                 let mut p = PathBuf::new();
                 p.push("./solved_board.csv");
                 p
