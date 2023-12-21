@@ -22,8 +22,8 @@ pub struct Args {
     pub attempt: bool,
 
     /// Where to send the output
-    #[arg(short, long)]
-    output: Option<PathBuf>
+    #[arg(short, long, value_name="FILE")]
+    pub output: Option<PathBuf>
 }
 
 //Other potential options:

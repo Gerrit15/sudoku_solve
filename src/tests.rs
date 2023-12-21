@@ -189,7 +189,7 @@ fn collapse_board() {
 }
 
 #[test]
-fn int_test() {
+fn integration_test() {
     let b = match gen_board() {
         Ok(b) => b,
         Err(_) => panic!("Couldn't board gen")
@@ -207,6 +207,7 @@ fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
         path: PathBuf::from(path),
         contains_header,
         verbose: false,
-        attempt
+        attempt,
+        output: None
     }
 }
