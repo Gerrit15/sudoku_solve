@@ -45,10 +45,14 @@ fn run(args: Args) -> Result<(), Error> {
     if args.verbose {board.display()}
     println!();
 
-    match board.solve(None) {
-        Ok(x) => {x.0.display()},
+    let solved_board = match board.solve(None) {
+        Ok(x) => {x.0},
         Err(e) => return Err(e)
-    }
+    };
+    match export_board(solved_board, args.output) {
+        Ok(()) => (),
+        Err(e) => return Err(e)
+    };
 
     Ok(())
 }
