@@ -127,7 +127,28 @@ pub fn export_board(board: Board, path: Option<PathBuf>) -> Result<(), Error> {
         out_board.push(out_row);
     }
 
-    let mut writer = Writer::from_writer(vec![]);
-    for i in 0..9 {writer.write_record(&out_board[i]).unwrap()};
+    let mut writer = match Writer::from_path(path) {
+        Ok(x) => x,
+        Err(_) => {
+            let line = line!()-3;
+            let file = file!().to_owned();
+            let message = "Could not write to file".to_string();
+            let error = Error::new(message, line, file);
+            return Err(error)
+        }
+    };
+    for i in 0..9 {
+        match writer.write_record(&out_board[i]) {
+            Ok(_) => (),
+            Err(_) => {
+                let line = line!()-3;
+                let file = file!().to_owned();
+                let message = "Could not write to file".to_string();
+                let error = Error::new(message, line, file);
+                return Err(error)
+            }
+        }
+    };
+    writer.flush().unwrap();
     Ok(())
 }
