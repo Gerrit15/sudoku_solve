@@ -1,9 +1,13 @@
 mod board;
 mod args;
 mod error;
+mod board_gen;
+use std::path::PathBuf;
+
 use board::Board;
 use args::Args;
 use clap::Parser;
+use csv::Writer;
 use error::Error;
 
 #[cfg(test)]
@@ -32,21 +36,28 @@ fn run(args: Args) -> Result<(), Error> {
             let line = line!()-3;
             let file = file!().to_string();
             let message = match args.verbose {
-                //make sure to account for verbose
                 true => "Oops! Couldn't load CSV!\n".to_string() + &e.message,
                 false => "Oops! Couldn't load CSV!".to_string()
             };
-            //println!("Oops! Couldn't load CSV!");
             return Err(Error::new(message, line, file))
         }
     };
     if args.verbose {board.display()}
+    println!();
+
+    let solved_board = match board.solve(None) {
+        Ok(x) => {x.0},
+        Err(e) => return Err(e)
+    };
+    match export_board(solved_board, args.output, args.remove) {
+        Ok(()) => (),
+        Err(e) => return Err(e)
+    };
 
     Ok(())
 }
 
 pub fn load_board(args: Args) -> Result<Board, Error> {
-    //This is give None if it couldn't turn the path into a string
     let path = match args.path.to_str() {
         Some(x) => x.to_owned(),
         None => {
@@ -57,7 +68,6 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
         }
     };
 
-    //This will Err<t> if the path provided doesn't have a destination
     let file = match std::fs::File::open(path) {
         Ok(x) => x,
         Err(e) => {
@@ -72,7 +82,6 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
     let mut csv_reader = csv::ReaderBuilder::new().has_headers(args.contains_header).from_reader(file);
     let mut board = vec![];
     
-    //This will Err<t> if the provided file doesn't go well.
     for i in csv_reader.deserialize() {
         let record: Vec<String> = match i {
             Ok(x) => x,
@@ -85,4 +94,65 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
         board.push(record);
     }
     Board::new(board, args.attempt)
+}
+
+pub fn export_board(board: Board, path: Option<PathBuf>, rewrite: bool) -> Result<(), Error> {
+    let path = match path {
+        Some(x) => {
+            if x.exists() && !rewrite {
+                let mut p = PathBuf::new();
+                p.push("./solved_board.csv");
+                p
+            }
+            else {x}
+        },
+        None => {
+            let mut p = PathBuf::new();
+            p.push("./solved_board.csv");
+            p
+        }
+    };
+    let mut out_board: Vec<Vec<String>> = vec![];
+    for i in board.items {
+        let mut out_row = vec![];
+        for j in i {
+            let tile_string = match j {
+                board::Tile::Num(n) => n.to_string(),
+                board::Tile::Non(n) => {
+                    let mut tile = "".to_string();
+                    for k in n {
+                        tile = tile + &k.to_string() + ", "
+                    }
+                    tile
+                },
+            };
+            out_row.push(tile_string);
+        }
+        out_board.push(out_row);
+    }
+
+    let mut writer = match Writer::from_path(path) {
+        Ok(x) => x,
+        Err(_) => {
+            let line = line!()-3;
+            let file = file!().to_owned();
+            let message = "Could not write to file".to_string();
+            let error = Error::new(message, line, file);
+            return Err(error)
+        }
+    };
+    for i in 0..9 {
+        match writer.write_record(&out_board[i]) {
+            Ok(_) => (),
+            Err(_) => {
+                let line = line!()-3;
+                let file = file!().to_owned();
+                let message = "Could not write to file".to_string();
+                let error = Error::new(message, line, file);
+                return Err(error)
+            }
+        }
+    };
+    writer.flush().unwrap();
+    Ok(())
 }
