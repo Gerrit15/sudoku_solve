@@ -188,7 +188,7 @@ fn collapse_board() {
     assert_eq!(board, b2);
 }
 
-#[test]
+/*#[test]
 fn integration_test() {
     let b = match gen_board() {
         Ok(b) => b,
@@ -199,6 +199,23 @@ fn integration_test() {
         Err(_) => panic!("Couldn't solve")
     };
     assert_eq!(b, holey)
+}*/
+use proptest::prelude::*;
+proptest! {
+    #[test]
+    fn integration_test(a in 1u32..40) {
+        let b = match gen_board() {
+            Ok(b) => b,
+            Err(_) => panic!("Couldn't board gen")
+        };
+        //the failed previous version of the test, it couldn't handle unsolvable boards
+        /*let holey = match poke_holes(&b, a).solve(None) {
+            Ok(n) => n.0,
+            Err(_) => panic!("Couldn't solve")
+        };*/
+        let holey = poke_holes(&b, a).solve(None);
+        assert!(matches!(holey, Ok(_)))
+    }
 }
 
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.

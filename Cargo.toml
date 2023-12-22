@@ -8,3 +8,6 @@ authors = ["Gerrit R"]
 csv = "1.3.0"
 clap = {version = "4.4.8", features = ["derive"]}
 rand = "0.8.5"
+
+[dev-dependencies]
+proptest = "1.0.0"
