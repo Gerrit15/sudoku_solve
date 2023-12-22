@@ -104,7 +104,6 @@ impl Board {
             if i != x {
                 match self.items[y][i] {
                     Tile::Num(n) => {
-                        //println!("VEC: {:?}, TRYING TO PUSH: {n}", &row);
                         if !row.contains(&n) && (Tile::Num(n) != self.items[y][x]) {row.push(n)}
                         else {
                             let line = line!()-2;
@@ -128,7 +127,7 @@ impl Board {
         let x = x1 - 1;
         let y = y1 - 1;
         let mut row = vec![];
-        for i in 1..9 {
+        for i in 0..9 {
             if i != y {
                 match self.items[i][x] {
                     Tile::Num(n) => {

@@ -34,6 +34,7 @@ pub struct Args {
 //  - Output: where to put the output of the file
 //  - Displaying Each step/Walking through steps? For solving
 //      - In the form of a video or gif? could be a fun stretch goal
+//      - animation in terminal?
 //  - What do do in the event of a branching pathway?
 //  - Generate a board to use?
 //  - Config?
