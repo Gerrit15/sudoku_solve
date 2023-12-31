@@ -1,9 +1,16 @@
+//Based off of the algorithm outlined in this post:
+//https://gamedev.stackexchange.com/questions/56149/how-can-i-generate-sudoku-puzzles
+//Specifically the second solution, at time of recording.
+//
+//Not sure if it makes every possible board, but it works well enough for general generation
+
 use super::Board;
 use super::board::Tile;
 use super::Error;
 use rand::{thread_rng, Rng};
 use rand::seq::SliceRandom;
 
+#[allow(dead_code)]
 pub fn gen_board() -> Result<Board, Error> {
     let mut row1 = make_tile((1..=9).collect::<Vec<u8>>());
 
@@ -48,6 +55,7 @@ pub fn gen_board() -> Result<Board, Error> {
     Ok(board)
 }
 
+#[allow(dead_code)]
 //returns a board with holes poked in it
 pub fn poke_holes(board: &Board, num_holes: u32) -> Board {
     let mut holey = board.clone();
