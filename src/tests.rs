@@ -202,6 +202,31 @@ proptest! {
         };
         assert_eq!(b, holey)
     }
+
+    #[test]
+    fn row_sum(_ in 1u32..100000) {
+        let b = match gen_board() {
+            Ok(b) => b,
+            Err(_) => panic!("Couldn't board gen")
+        };
+
+        let holey = poke_holes(&b, rand::thread_rng().gen_range(1..=80)).solve(None);
+        let mut row_sum = vec![];
+        for i in holey.unwrap().0.items {
+            let mut n = 0;
+            for j in i {
+                match j {
+                    Tile::Num(val) => n += val as u32,
+                    Tile::Non(vec) => {n += vec.iter().sum::<u8>() as u32}
+                };
+            }
+            row_sum.push(n);
+        }
+        for i in row_sum {
+            //45 is 9+8+7..+1
+            assert!(i >= 45)
+        }
+    }
 }
 
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
