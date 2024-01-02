@@ -87,6 +87,12 @@ impl Board {
                 }
             }
         }
+        if board.is_empty() {
+            let line = line!() - 1;
+            let file = file!().to_owned();
+            let message = "Board is entirely empty".to_owned();
+            return Err(Error::new(message, line, file))
+        }
 
         Ok(board)
     }
@@ -182,6 +188,18 @@ impl Board {
         }
 
         Ok(square)
+    }
+
+    fn is_empty(&self) -> bool {
+        for i in &self.items {
+            for j in i {
+                match  j {
+                    Tile::Num(_) => return false,
+                    _ => ()
+                }
+            }
+        }
+        true
     }
 
     pub fn collapse_tile(&self, x: usize, y: usize) -> Result<Tile, Error> {

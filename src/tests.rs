@@ -93,6 +93,16 @@ fn non_uniform() {
 }
 
 #[test]
+//This is because it gets in a deadlock when all 81 tiles are empty
+fn empty() {
+    let args = arg_gen("test_csvs/empty.csv", false, false);
+    match load_board(args) {
+        Ok(_) => panic!("returned valid board"),
+        Err(b) => assert_eq!(&b.message, "Board is entirely empty")
+    }
+}
+
+#[test]
 fn attempt() {
     use Tile::*;
     let args = arg_gen("test_csvs/attempt.csv", false, true);
