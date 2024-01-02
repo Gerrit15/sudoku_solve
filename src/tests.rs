@@ -188,33 +188,19 @@ fn collapse_board() {
     assert_eq!(board, b2);
 }
 
-/*#[test]
-fn integration_test() {
-    let b = match gen_board() {
-        Ok(b) => b,
-        Err(_) => panic!("Couldn't board gen")
-    };
-    let holey = match poke_holes(&b, 40).solve(None) {
-        Ok(n) => n.0,
-        Err(_) => panic!("Couldn't solve")
-    };
-    assert_eq!(b, holey)
-}*/
 use proptest::prelude::*;
 proptest! {
     #[test]
-    fn integration_test(a in 1u32..40) {
+    fn twelve_test(_ in 1u32..100000) {
         let b = match gen_board() {
             Ok(b) => b,
             Err(_) => panic!("Couldn't board gen")
         };
-        //the failed previous version of the test, it couldn't handle unsolvable boards
-        /*let holey = match poke_holes(&b, a).solve(None) {
+        let holey = match poke_holes(&b, 12).solve(None) {
             Ok(n) => n.0,
             Err(_) => panic!("Couldn't solve")
-        };*/
-        let holey = poke_holes(&b, a).solve(None);
-        assert!(matches!(holey, Ok(_)))
+        };
+        assert_eq!(b, holey)
     }
 }
 
