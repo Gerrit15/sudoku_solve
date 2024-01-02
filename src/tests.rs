@@ -190,6 +190,7 @@ fn collapse_board() {
 
 use proptest::prelude::*;
 proptest! {
+    //This is twelve because it seems sit breaks down at 13 ¯\_(ツ)_/¯
     #[test]
     fn twelve_test(_ in 1u32..100000) {
         let b = match gen_board() {
