@@ -214,6 +214,9 @@ proptest! {
         assert_eq!(b, holey)
     }
 
+    //This test, and the following 2, are based on the assumption that in any sudoku board,
+    //The sum of the tiles must be equal to or greater then 45 (9+8+7..+1). The "greater then"
+    //Comes from Tile::Non, which also gets summed up.
     #[test]
     fn row_sum(_ in 1u32..100000) {
         let b = match gen_board() {
