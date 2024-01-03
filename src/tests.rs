@@ -262,6 +262,20 @@ proptest! {
             assert!(i >= 45)
         }
     }
+
+    fn square_sum(_ in 1u32..100000) {
+        let b = match gen_board() {
+            Ok(b) => b,
+            Err(_) => panic!("Couldn't board gen")
+        };
+
+        let holey = poke_holes(&b, rand::thread_rng().gen_range(1..=80)).solve(None).unwrap();
+        let mut square_sum: Vec<u32> = vec![];
+        //Build it up
+        for i in square_sum {
+            assert!(i >= 45)
+        }
+    }
 }
 
 //A simple function to generate example cmd line arguements, to avoid repetitive code in tests.
