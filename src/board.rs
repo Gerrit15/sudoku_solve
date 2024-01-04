@@ -1,4 +1,5 @@
 use super::Error;
+use rand::seq::SliceRandom;
 
 #[derive(PartialEq, Clone, Debug)]
 pub enum Tile {
@@ -252,7 +253,7 @@ impl Board {
         return Err(Error::new(message, line, file))
     }
 
-    fn is_solved(&self) -> bool {
+    pub fn is_solved(&self) -> bool {
         let mut solved = true;
         for i in &self.items {
             for j in i {
@@ -281,6 +282,22 @@ impl Board {
             }
         }
         Ok(board)
+    }
+    pub fn solve_attempt(board: &mut Board) {
+        let mut has_nudged = false;
+        for i in 0..9 {
+            for j in 0..9 {
+                match &board.items[j][i] {
+                    Tile::Non(vec) => {
+                        if !has_nudged {
+                            has_nudged = true;
+                            board.items[j][i] = Tile::Num(*vec.choose(&mut rand::thread_rng()).unwrap());
+                        }
+                    },
+                    _ => ()
+                }
+            }
+        }
     }
 
     pub fn display(&self) {
