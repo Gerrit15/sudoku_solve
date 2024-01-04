@@ -274,7 +274,22 @@ proptest! {
 
         let holey = poke_holes(&b, rand::thread_rng().gen_range(1..=80)).solve(None).unwrap();
         let mut square_sum: Vec<u32> = vec![];
-        //Build it up
+        //Adapted from the get_square() fn in board.rs
+        let tile_indeces = [1, 4, 7];
+        for centerx in tile_indeces {
+            for centery in  tile_indeces {
+                let mut n = 0;
+                for i in centerx-1..=centerx+1 {
+                    for j in centery-1..=centery+1 {
+                        match &holey.0.items[j][i] {
+                            Tile::Num(val) => n += val.clone() as u32,
+                            Tile::Non(vec) => n += vec.iter().sum::<u8>() as u32
+                        }
+                    }
+                }
+                square_sum.push(n)
+            }
+        }
         for i in square_sum {
             assert!(i >= 45)
         }
