@@ -51,7 +51,7 @@ fn run(args: Args) -> Result<(), Error> {
     };
 
     //You get one nudge to solve. lol.
-    if solved_board.1 && args.attempt {
+    if solved_board.1 && args.attempt_solve {
         Board::solve_attempt(&mut solved_board.0);
         solved_board = match solved_board.0.solve(None) {
             Ok(x) => x,

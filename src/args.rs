@@ -21,6 +21,10 @@ pub struct Args {
     #[arg(short, long)]
     pub attempt: bool,
 
+    ///Attempts really hard to solve the board. WARNING: Unstable by nature, will likely fail
+    #[arg(long)]
+    pub attempt_solve: bool,
+
     ///Whether or not to override "remove" the file it points to
     #[arg(short, long)]
     pub remove: bool,
