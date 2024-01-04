@@ -45,14 +45,23 @@ fn run(args: Args) -> Result<(), Error> {
     if args.verbose {board.display()}
     println!();
 
-    let solved_board = match board.solve(None) {
-        Ok(x) => {x.0},
+    let mut solved_board = match board.solve(None) {
+        Ok(x) => x,
         Err(e) => return Err(e)
     };
-    match export_board(solved_board, args.output, args.remove) {
-        Ok(()) => (),
-        Err(e) => return Err(e)
-    };
+
+    //You get one nudge to solve. lol.
+    if solved_board.1 && args.attempt {
+        Board::solve_attempt(&mut solved_board.0);
+        solved_board = match solved_board.0.solve(None) {
+            Ok(x) => x,
+            Err(e) => return Err(e)
+        };
+        match export_board(solved_board.0, args.output, args.remove) {
+            Ok(()) => (),
+            Err(e) => return Err(e)
+        };
+    }
 
     Ok(())
 }
