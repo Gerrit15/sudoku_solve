@@ -198,6 +198,9 @@ fn collapse_board() {
     assert_eq!(board, b2);
 }
 
+//There would be a test for the "solve attempt" fn here, but it's too unstable.
+//It just very likely fails.
+
 use proptest::prelude::*;
 proptest! {
     //This is twelve because it seems sit breaks down at 13 ¯\_(ツ)_/¯
