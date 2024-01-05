@@ -44,6 +44,5 @@ pub struct Args {
 //      - animation in terminal?
 //  - Generate a board to use?
 //  - Config?
-//  - maximum number of loops?
 //
 //Remember to put more chances for verbose output
