@@ -44,7 +44,7 @@ fn run(args: Args) -> Result<(), Error> {
     };
     if args.verbose {board.display(); println!()}
 
-    let mut solved_board = match board.solve(None) {
+    let mut solved_board = match board.solve(args.max_loop) {
         Ok(x) => x,
         Err(e) => return Err(e)
     };
@@ -52,7 +52,7 @@ fn run(args: Args) -> Result<(), Error> {
     //You get one nudge to solve. lol.
     if solved_board.1 && args.attempt_solve {
         Board::solve_attempt(&mut solved_board.0);
-        solved_board = match solved_board.0.solve(None) {
+        solved_board = match solved_board.0.solve(args.max_loop) {
             Ok(x) => x,
             Err(e) => return Err(e)
         };

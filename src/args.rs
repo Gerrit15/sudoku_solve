@@ -25,6 +25,10 @@ pub struct Args {
     #[arg(long)]
     pub attempt_solve: bool,
 
+    ///How many loops it makes to solve until it gives up.
+    #[arg(short, long, value_name="MAXIMUM")]
+    pub max_loop: Option<u64>,
+
     ///Whether or not to override "remove" the file it points to
     #[arg(short, long)]
     pub remove: bool,
@@ -35,11 +39,9 @@ pub struct Args {
 }
 
 //Other potential options:
-//  - Output: where to put the output of the file
 //  - Displaying Each step/Walking through steps? For solving
 //      - In the form of a video or gif? could be a fun stretch goal
 //      - animation in terminal?
-//  - What do do in the event of a branching pathway?
 //  - Generate a board to use?
 //  - Config?
 //  - maximum number of loops?
