@@ -42,8 +42,7 @@ fn run(args: Args) -> Result<(), Error> {
             return Err(Error::new(message, line, file))
         }
     };
-    if args.verbose {board.display()}
-    println!();
+    if args.verbose {board.display(); println!()}
 
     let mut solved_board = match board.solve(None) {
         Ok(x) => x,
@@ -57,11 +56,13 @@ fn run(args: Args) -> Result<(), Error> {
             Ok(x) => x,
             Err(e) => return Err(e)
         };
-        match export_board(solved_board.0, args.output, args.remove) {
-            Ok(()) => (),
-            Err(e) => return Err(e)
-        };
     }
+
+    if args.verbose {solved_board.0.display()}
+    match export_board(solved_board.0, args.output, args.remove, args.verbose) {
+        Ok(()) => (),
+        Err(e) => return Err(e)
+    };
 
     Ok(())
 }
@@ -105,10 +106,11 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
     Board::new(board, args.attempt)
 }
 
-pub fn export_board(board: Board, path: Option<PathBuf>, rewrite: bool) -> Result<(), Error> {
+pub fn export_board(board: Board, path: Option<PathBuf>, rewrite: bool, verbose: bool) -> Result<(), Error> {
     let path = match path {
         Some(x) => {
             if x.exists() && !rewrite {
+                if verbose {println!("File exists, writing elsewhere")}
                 let mut p = PathBuf::new();
                 p.push("./solved_board.csv");
                 p
@@ -121,6 +123,7 @@ pub fn export_board(board: Board, path: Option<PathBuf>, rewrite: bool) -> Resul
             p
         }
     };
+    if verbose {println!("Writing to {:?}", &path)}
     let mut out_board: Vec<Vec<String>> = vec![];
     for i in board.items {
         let mut out_row = vec![];
