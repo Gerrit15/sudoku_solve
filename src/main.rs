@@ -32,7 +32,7 @@ fn main() {
 //prematurely, meaning that code doesn't get increasing nested. Otherwise, this functions nearly
 //identical to main
 fn run(args: Args) -> Result<(), Error> {
-    let config = Config::new();
+    let config = Config::new(args.verbose);
     let board = match load_board(args.clone()){
         Ok(b) => b,
         Err(e) => {

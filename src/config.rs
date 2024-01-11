@@ -10,27 +10,29 @@ use dirs::config_dir;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
     pub default_output: String
 }
 
 impl Config {
-    pub fn new(/*verbose: bool, config: Option<String>*/) -> Config {
-        let n = config_dir(); 
-        if let None = n {
+    pub fn new(verbose: bool/*, config: Option<String>*/) -> Config {
+        if let None = config_dir() {
+            if verbose {println!("Could not find config file, defaulting")}
             return Config::default();
         };
-        let mut n = n.unwrap();
+        let mut n = config_dir().unwrap();
         n.push("sudoku_solve/config.json");
 
         let file = fs::File::open(n);
         if let Result::Err(_) = file {
+            if verbose {println!("Could not open config file, defaulting")}
             return Config::default()
         };
         let file = file.unwrap();
 
         let config: Config = serde_json::from_reader(file).unwrap_or_default();
+        if verbose {println!("Loaded Config: {:?}", config)}
         config
     }
 }
