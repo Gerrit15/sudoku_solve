@@ -1,3 +1,5 @@
+//This is primarily a proof of concept
+
 //todo:
 //- path override in args
 //- let it generate a config in .config
@@ -14,11 +16,29 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new() -> Config {
-        let mut n = config_dir().unwrap();
+    pub fn new(/*verbose: bool, config: Option<String>*/) -> Config {
+        let n = config_dir(); 
+        if let None = n {
+            return Config::default();
+        };
+        let mut n = n.unwrap();
         n.push("sudoku_solve/config.json");
-        let file = fs::File::open(n).unwrap();
-        let p: Config = serde_json::from_reader(file).unwrap();
-        p
+
+        let file = fs::File::open(n);
+        if let Result::Err(_) = file {
+            return Config::default()
+        };
+        let file = file.unwrap();
+
+        let config: Config = serde_json::from_reader(file).unwrap_or_default();
+        config
+    }
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Config {
+            default_output: "./config.json".to_string()
+        }
     }
 }
