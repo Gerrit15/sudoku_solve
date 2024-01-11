@@ -2,9 +2,11 @@ mod board;
 mod args;
 mod error;
 mod board_gen;
+mod config;
 use std::path::PathBuf;
 
 use board::Board;
+use config::Config;
 use args::Args;
 use clap::Parser;
 use csv::Writer;
@@ -30,6 +32,7 @@ fn main() {
 //prematurely, meaning that code doesn't get increasing nested. Otherwise, this functions nearly
 //identical to main
 fn run(args: Args) -> Result<(), Error> {
+    let config = Config::new();
     let board = match load_board(args.clone()){
         Ok(b) => b,
         Err(e) => {
@@ -59,7 +62,7 @@ fn run(args: Args) -> Result<(), Error> {
     }
 
     if args.verbose {solved_board.0.display()}
-    match export_board(solved_board.0, args.output, args.remove, args.verbose) {
+    match export_board(solved_board.0, args.output, args.remove, args.verbose, &config.default_output) {
         Ok(()) => (),
         Err(e) => return Err(e)
     };
@@ -106,20 +109,20 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
     Board::new(board, args.attempt)
 }
 
-pub fn export_board(board: Board, path: Option<PathBuf>, rewrite: bool, verbose: bool) -> Result<(), Error> {
+pub fn export_board(board: Board, path: Option<PathBuf>, rewrite: bool, verbose: bool, default_out: &String) -> Result<(), Error> {
     let path = match path {
         Some(x) => {
             if x.exists() && !rewrite {
                 if verbose {println!("File exists, writing elsewhere")}
                 let mut p = PathBuf::new();
-                p.push("./solved_board.csv");
+                p.push(default_out);
                 p
             }
             else {x}
         },
         None => {
             let mut p = PathBuf::new();
-            p.push("./solved_board.csv");
+            p.push(default_out);
             p
         }
     };
