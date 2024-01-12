@@ -9,6 +9,10 @@ pub struct Args {
     ///Path of the desired Sudoku board
     pub path: PathBuf,
 
+    ///An option to override to "~/.config/" for your config directory
+    #[arg(long, value_name="DIRECTORY")]
+    pub config_dir: Option<PathBuf>,
+
     ///Does the CSV have a header
     #[arg(short, long)]
     pub contains_header: bool,

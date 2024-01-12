@@ -1,11 +1,11 @@
 //This is primarily a proof of concept
-
 //todo:
 //- path override in args
 //- let it generate a config in .config
 //- handle missings/defaults
 //- maybe add one or two more things for it to do
 use std::fs;
+use std::path::PathBuf;
 use dirs::config_dir;
 
 use serde::{Deserialize, Serialize};
@@ -16,13 +16,24 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(verbose: bool/*, config: Option<String>*/) -> Config {
-        if let None = config_dir() {
-            if verbose {println!("Could not find config file, defaulting")}
-            return Config::default();
+    pub fn new(verbose: bool, config: Option<PathBuf>) -> Config {
+        println!("{:?}", config);
+        let n = match config {
+            Some(path) => {
+                let mut p = std::path::PathBuf::new();
+                p.push(path);
+                p.push("config.json");
+                println!("{:?}", p);
+                p
+            },
+            None => {
+                if let None = config_dir() {
+                    if verbose {println!("Could not find config file, defaulting")}
+                    return Config::default();
+                };
+                config_dir().unwrap()
+            }
         };
-        let mut n = config_dir().unwrap();
-        n.push("sudoku_solve/config.json");
 
         let file = fs::File::open(n);
         if let Result::Err(_) = file {
@@ -40,7 +51,7 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
-            default_output: "./config.json".to_string()
+            default_output: "./solved_file_default.csv".to_string()
         }
     }
 }
