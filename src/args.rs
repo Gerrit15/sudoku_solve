@@ -3,7 +3,7 @@ use clap::Parser;
 
 //Note that the triple slash is for the clap crate, it's what will show up with -h
 
-///TODO: command line description
+///Sudoku Solver is a tool that solves Sudoku boards in the form of 9x9 CSV files.
 #[derive(Parser, Clone)]
 pub struct Args {
     ///Path of the desired Sudoku board
