@@ -13,20 +13,21 @@ origional list is now [5, 3, 9, 2, x, 1, 4, 7, 6], so x only has one possible st
 [5, 3, 9, 2, 8, 1, 4, 7, 6], and is solved.
 
 ## How to use
-Using the cargo build too, clone the repository, the run `cargo build --release`, which will output the compiled executable into `target/release/sudoku_solve`.
+Using Rust's Cargo Build tool, clone this repository, the run `cargo build --release`, which will output the compiled executable into `target/release/sudoku_solve`.
 To run it, simply put `[path to executable] [path to board] [additional arguements]`. For example: `./sudoku_solve board.csv -v -a`. To view all arguements, 
 run `[path to executable] -h`.
 
 ## Limitations
 At the moment, due to the nature of algorithm in use, there are some limitations to what can be solved by the solver. For example, if, after all possible iterations,
 there are still tiles that cannot collapse, then there isn't anything that the algorithm can do. In this situation, the solver will spit out the unfinished 
-board, and human intervention will be required.
+board, and human intervention will be required. The `--attempt-solve` flag can be used to combat this, just not very effectively.
 
-## Goals
-- Command line input
-- Take input files, output files
-- Solving the input using wave function collapse
+## Config
+The config file is a proof of concept, displaying the ability for this project to have a config. It's written in JSON and currently provides a default output file name. 
+The `--config-dir` command is provided to override the default configuration directory of a given operating system, such as Linux's `~/.config`. It will initially look in
+for a `sudoku_solve/config.json` inside of a system's default configuration directory.
 
-## Stretch Goals
-- GUI
-- Output a nice visualization
+## Attempt-Solve
+Much like the config file, Attempt-Solve is a proof of concept. It is highly unstable do to it's nature, but if a board is not solvable with just WFC, 
+this flag can be raised to have the program guess a correct answer to one of the unknown tiles, and move on from there. This is unstable because there is no 
+check whether or not the guessed answer is actually correct, and will often result in a runtime error.
