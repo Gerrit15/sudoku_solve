@@ -28,6 +28,6 @@ The `--config-dir` command is provided to override the default configuration dir
 for a `sudoku_solve/config.json` inside of a system's default configuration directory.
 
 ## Attempt-Solve
-Much like the config file, Attempt-Solve is a proof of concept. It is highly unstable do to it's nature, but if a board is not solvable with just WFC, 
-this flag can be raised to have the program guess a correct answer to one of the unknown tiles, and move on from there. This is unstable because there is no 
-check whether or not the guessed answer is actually correct, and will often result in a runtime error.
+Much like the config file, Attempt-Solve is a proof of concept. It is highly unstable due to its nature, but if a board is not solvable with WFC, 
+this flag can be raised to have the program guess a correct answer for one of the unknown tiles, and move on from there. This is unstable because there is no 
+check as to whether or not the guessed answer is actually correct, and will often result in an error.
