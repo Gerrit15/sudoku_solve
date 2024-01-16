@@ -93,6 +93,16 @@ fn non_uniform() {
 }
 
 #[test]
+//This is because it gets in a deadlock when all 81 tiles are empty
+fn empty() {
+    let args = arg_gen("test_csvs/empty.csv", false, false);
+    match load_board(args) {
+        Ok(_) => panic!("returned valid board"),
+        Err(b) => assert_eq!(&b.message, "Board is entirely empty")
+    }
+}
+
+#[test]
 fn attempt() {
     use Tile::*;
     let args = arg_gen("test_csvs/attempt.csv", false, true);
@@ -188,33 +198,104 @@ fn collapse_board() {
     assert_eq!(board, b2);
 }
 
-/*#[test]
-fn integration_test() {
-    let b = match gen_board() {
-        Ok(b) => b,
-        Err(_) => panic!("Couldn't board gen")
-    };
-    let holey = match poke_holes(&b, 40).solve(None) {
-        Ok(n) => n.0,
-        Err(_) => panic!("Couldn't solve")
-    };
-    assert_eq!(b, holey)
-}*/
+//There would be a test for the "solve attempt" fn here, but it's too unstable.
+//It just very likely fails.
+
 use proptest::prelude::*;
 proptest! {
+    //This is twelve because it seems sit breaks down at 13 ¯\_(ツ)_/¯
     #[test]
-    fn integration_test(a in 1u32..40) {
+    fn twelve_test(_ in 1u32..100000) {
         let b = match gen_board() {
             Ok(b) => b,
             Err(_) => panic!("Couldn't board gen")
         };
-        //the failed previous version of the test, it couldn't handle unsolvable boards
-        /*let holey = match poke_holes(&b, a).solve(None) {
+        let holey = match poke_holes(&b, 12).solve(None) {
             Ok(n) => n.0,
             Err(_) => panic!("Couldn't solve")
-        };*/
-        let holey = poke_holes(&b, a).solve(None);
-        assert!(matches!(holey, Ok(_)))
+        };
+        assert_eq!(b, holey)
+    }
+
+    //This test, and the following 2, are based on the assumption that in any sudoku board,
+    //The sum of the tiles must be equal to or greater then 45 (9+8+7..+1). The "greater then"
+    //Comes from Tile::Non, which also gets summed up.
+    #[test]
+    fn row_sum(_ in 1u32..100000) {
+        let b = match gen_board() {
+            Ok(b) => b,
+            Err(_) => panic!("Couldn't board gen")
+        };
+
+        let holey = poke_holes(&b, rand::thread_rng().gen_range(1..=80)).solve(None);
+        let mut row_sum = vec![];
+        for i in holey.unwrap().0.items {
+            let mut n = 0;
+            for j in i {
+                match j {
+                    Tile::Num(val) => n += val as u32,
+                    Tile::Non(vec) => {n += vec.iter().sum::<u8>() as u32}
+                };
+            }
+            row_sum.push(n);
+        }
+        for i in row_sum {
+            //45 is 9+8+7..+1
+            assert!(i >= 45)
+        }
+    }
+
+    #[test]
+    fn col_sum(_ in 1u32..100000) {
+        let b = match gen_board() {
+            Ok(b) => b,
+            Err(_) => panic!("Couldn't board gen")
+        };
+
+        let holey = poke_holes(&b, rand::thread_rng().gen_range(1..=80)).solve(None).unwrap();
+        let mut col_sum = vec![];
+        for i in 0..9 {
+            let mut n = 0;
+            for j in 0..9 {
+                match &holey.0.items[j][i] {
+                    Tile::Num(val) => n += val.clone() as u32,
+                    Tile::Non(vec) => n += vec.iter().sum::<u8>() as u32
+                }
+            }
+            col_sum.push(n);
+        }
+        for i in col_sum {
+            assert!(i >= 45)
+        }
+    }
+
+    fn square_sum(_ in 1u32..100000) {
+        let b = match gen_board() {
+            Ok(b) => b,
+            Err(_) => panic!("Couldn't board gen")
+        };
+
+        let holey = poke_holes(&b, rand::thread_rng().gen_range(1..=80)).solve(None).unwrap();
+        let mut square_sum: Vec<u32> = vec![];
+        //Adapted from the get_square() fn in board.rs
+        let tile_indeces = [1, 4, 7];
+        for centerx in tile_indeces {
+            for centery in  tile_indeces {
+                let mut n = 0;
+                for i in centerx-1..=centerx+1 {
+                    for j in centery-1..=centery+1 {
+                        match &holey.0.items[j][i] {
+                            Tile::Num(val) => n += val.clone() as u32,
+                            Tile::Non(vec) => n += vec.iter().sum::<u8>() as u32
+                        }
+                    }
+                }
+                square_sum.push(n)
+            }
+        }
+        for i in square_sum {
+            assert!(i >= 45)
+        }
     }
 }
 
@@ -225,6 +306,7 @@ fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
         contains_header,
         verbose: false,
         attempt,
+        attempt_solve: false,
         remove: false,
         output: None
     }

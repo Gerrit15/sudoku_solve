@@ -3,11 +3,15 @@ use clap::Parser;
 
 //Note that the triple slash is for the clap crate, it's what will show up with -h
 
-///TODO: command line description
+///Sudoku Solver is a tool that solves Sudoku boards in the form of 9x9 CSV files.
 #[derive(Parser, Clone)]
 pub struct Args {
     ///Path of the desired Sudoku board
     pub path: PathBuf,
+
+    ///An option to override to "~/.config/" for your config directory
+    #[arg(long, value_name="DIRECTORY")]
+    pub config_dir: Option<PathBuf>,
 
     ///Does the CSV have a header
     #[arg(short, long)]
@@ -21,6 +25,14 @@ pub struct Args {
     #[arg(short, long)]
     pub attempt: bool,
 
+    ///Attempts really hard to solve the board. WARNING: Unstable by nature, will likely fail
+    #[arg(long)]
+    pub attempt_solve: bool,
+
+    ///How many loops it makes to solve until it gives up.
+    #[arg(short, long, value_name="MAXIMUM")]
+    pub max_loop: Option<u64>,
+
     ///Whether or not to override "remove" the file it points to
     #[arg(short, long)]
     pub remove: bool,
@@ -31,11 +43,9 @@ pub struct Args {
 }
 
 //Other potential options:
-//  - Output: where to put the output of the file
 //  - Displaying Each step/Walking through steps? For solving
 //      - In the form of a video or gif? could be a fun stretch goal
 //      - animation in terminal?
-//  - What do do in the event of a branching pathway?
 //  - Generate a board to use?
 //  - Config?
 //

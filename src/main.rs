@@ -2,9 +2,11 @@ mod board;
 mod args;
 mod error;
 mod board_gen;
+mod config;
 use std::path::PathBuf;
 
 use board::Board;
+use config::Config;
 use args::Args;
 use clap::Parser;
 use csv::Writer;
@@ -30,6 +32,7 @@ fn main() {
 //prematurely, meaning that code doesn't get increasing nested. Otherwise, this functions nearly
 //identical to main
 fn run(args: Args) -> Result<(), Error> {
+    let config = Config::new(args.verbose, args.config_dir.clone());
     let board = match load_board(args.clone()){
         Ok(b) => b,
         Err(e) => {
@@ -42,14 +45,24 @@ fn run(args: Args) -> Result<(), Error> {
             return Err(Error::new(message, line, file))
         }
     };
-    if args.verbose {board.display()}
-    println!();
+    if args.verbose {board.display(); println!()}
 
-    let solved_board = match board.solve(None) {
-        Ok(x) => {x.0},
+    let mut solved_board = match board.solve(args.max_loop) {
+        Ok(x) => x,
         Err(e) => return Err(e)
     };
-    match export_board(solved_board, args.output, args.remove) {
+
+    //You get one nudge to solve. lol.
+    if solved_board.1 && args.attempt_solve {
+        Board::solve_attempt(&mut solved_board.0);
+        solved_board = match solved_board.0.solve(args.max_loop) {
+            Ok(x) => x,
+            Err(e) => return Err(e)
+        };
+    }
+
+    if args.verbose {solved_board.0.display()}
+    match export_board(solved_board.0, args.output, args.remove, args.verbose, &config.default_output) {
         Ok(()) => (),
         Err(e) => return Err(e)
     };
@@ -96,22 +109,24 @@ pub fn load_board(args: Args) -> Result<Board, Error> {
     Board::new(board, args.attempt)
 }
 
-pub fn export_board(board: Board, path: Option<PathBuf>, rewrite: bool) -> Result<(), Error> {
+pub fn export_board(board: Board, path: Option<PathBuf>, rewrite: bool, verbose: bool, default_out: &String) -> Result<(), Error> {
     let path = match path {
         Some(x) => {
             if x.exists() && !rewrite {
+                if verbose {println!("File exists, writing elsewhere")}
                 let mut p = PathBuf::new();
-                p.push("./solved_board.csv");
+                p.push(default_out);
                 p
             }
             else {x}
         },
         None => {
             let mut p = PathBuf::new();
-            p.push("./solved_board.csv");
+            p.push(default_out);
             p
         }
     };
+    if verbose {println!("Writing to {:?}", &path)}
     let mut out_board: Vec<Vec<String>> = vec![];
     for i in board.items {
         let mut out_row = vec![];

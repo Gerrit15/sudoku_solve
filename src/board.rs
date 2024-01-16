@@ -1,4 +1,5 @@
 use super::Error;
+use rand::seq::SliceRandom;
 
 #[derive(PartialEq, Clone, Debug)]
 pub enum Tile {
@@ -86,6 +87,12 @@ impl Board {
                     Err(e) => return Err(e)
                 }
             }
+        }
+        if board.is_empty() {
+            let line = line!() - 1;
+            let file = file!().to_owned();
+            let message = "Board is entirely empty".to_owned();
+            return Err(Error::new(message, line, file))
         }
 
         Ok(board)
@@ -184,6 +191,18 @@ impl Board {
         Ok(square)
     }
 
+    fn is_empty(&self) -> bool {
+        for i in &self.items {
+            for j in i {
+                match  j {
+                    Tile::Num(_) => return false,
+                    _ => ()
+                }
+            }
+        }
+        true
+    }
+
     pub fn collapse_tile(&self, x: usize, y: usize) -> Result<Tile, Error> {
         let row = match self.get_row(x, y) {
             Ok(x) => x,
@@ -234,7 +253,7 @@ impl Board {
         return Err(Error::new(message, line, file))
     }
 
-    fn is_solved(&self) -> bool {
+    pub fn is_solved(&self) -> bool {
         let mut solved = true;
         for i in &self.items {
             for j in i {
@@ -263,6 +282,22 @@ impl Board {
             }
         }
         Ok(board)
+    }
+    pub fn solve_attempt(board: &mut Board) {
+        let mut has_nudged = false;
+        for i in 0..9 {
+            for j in 0..9 {
+                match &board.items[j][i] {
+                    Tile::Non(vec) => {
+                        if !has_nudged {
+                            has_nudged = true;
+                            board.items[j][i] = Tile::Num(*vec.choose(&mut rand::thread_rng()).unwrap());
+                        }
+                    },
+                    _ => ()
+                }
+            }
+        }
     }
 
     pub fn display(&self) {
