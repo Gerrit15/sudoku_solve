@@ -31,7 +31,7 @@
 \maketitle
 \section{Introduction}
 This project takes an input file containing an 
-(unsolved) sudoku board in the form of a CSV, and solve it, using Rustlang. This document is made with \LaTeX.
+(unsolved) sudoku board in the form of a CSV, and solve it, using Rust. This document is made with \LaTeX.
 
 \section{Wave Function Collapse}
 Wave function collapse is an algorithm that has a scary name, but 
@@ -147,24 +147,24 @@ during the loading process the program will try to load the first number it can 
 be used, well, as a header for whatever spreadsheet it was exported from. If this is the case, the -h flag will acount for it. 
 
 \section{Config}
-The provided config file is a proof of concept. Without overriding, the executable looks for ~/.config/sudoku-solve/config.json, and will attempt to load it. As of now, it only
+The provided config file is a proof of concept. Without overriding, the executable looks for $\sim$/.config/sudoku-solve/config.json, and will attempt to load it. As of now, it only
 provides a default for the name of the output file, but is easily extensible.
 
 \section{Running, Tests}
 This project is run the same as any other Rust projects, using "cargo run". That being said, it does have one required argument: the path of a file, to load as a CSV.
-It also has a few optional arguments, such as -v for verbose outputs and -a for attempting a little harder to load tiles. The full list can be viewed with either -h or --help.
-As with tests, tests are run as usual, with "cargo test" and are located in tests.rs.
+It also has a few optional arguments, such as -v for verbose outputs and -a for attempting a little harder to load tiles. The full list can be 
+viewed with either -h or --help (or in the next section). As with tests, tests are run as usual, with "cargo test" and are located in tests.rs.
 
 \section{Arguments}
 \begin{itemize}
-  \item --config-dir: An override to the defaulut config directory
-  \item -c/--contains-header: a flag for if the CSV contains a header row
-  \item -v/--verbose: provides more output as it runs
-  \item -a/--attempt: Tries a little harder to load numbers into the CSV
-  \item --atempt-solve: UNSTABLE will try to solve the board a little more
-  \item -m/--max-loop: How many loops to take before it gives up, $[0, 2^{64}]$
-  \item -r/--remove: If high, will override the output file it's pointing to. Does not apply to the default output, that will always be overridden
-  \item -o/--output: Where to send the output of the file
-  \item -h/--help: Provides this information in terminal
+  \item -\ -config-dir: An override for the default config directory
+  \item -c/-\ -contains-header: a flag for if the CSV contains a header row
+  \item -v/-\ -verbose: provides more output as it runs
+  \item -a/-\ -attempt: tries a little harder to load numbers into the CSV
+  \item -\ -attempt-solve: [UNSTABLE] will try to solve the board a little more
+  \item -m/-\ -max-loop: How many loops to take before it gives up, $[0, 2^{64}]$
+  \item -r/-\ -remove: If this flag is high, will override the output file it's pointing to. Does not apply to the default output, that will always be overridden
+  \item -o/-\ -output: Where to send the output of the file
+  \item -h/-\ -help: Provides this information in terminal
 \end{itemize}
 \end{document}
