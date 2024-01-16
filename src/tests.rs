@@ -308,6 +308,8 @@ fn arg_gen(path: &str, contains_header:bool, attempt: bool) -> Args {
         attempt,
         attempt_solve: false,
         remove: false,
-        output: None
+        output: None,
+        config_dir: None,
+        max_loop: None
     }
 }
